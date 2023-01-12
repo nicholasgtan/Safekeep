@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  firstname String
+  lastName  String
+  password  String
+  client    Client  @relation(fields: [clientId], references: [id])
+  clientId  String  @unique
+}
+
+model Admin {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  firstname String
+  lastName  String
+  password  String
+  client    Client  @relation(fields: [clientId], references: [id])
+  clientId  String  @unique
+}
+
+model Client {
+  id              String @id @default(uuid())
+  name            String
+  type            String
+  cashBalance     Int
+  equityBalance   Int
+  fixedIncomeBal  Int
+  Trade           Trade[]
+  userList        User[]
+  accountRep      Admin?
+}
+
+model Trade {
+  id String @id @default(uuid())
+  client         Client  @relation(fields: [clientId], references: [id])
+  clientId       String  @unique
+  tradeDate      DateTime
+  settlementDate DateTime
+  stockType      Stock @default(equity)
+  settlementAmt  Int
+  position       Position @default(buy)    
+  onTime         OnTime @default(no)
+}
+
+enum Stock {
+  equity
+  fixedIncome
+}
+
+enum Position {
+  buy
+  sell
+}
+
+enum OnTime {
+  yes
+  no
+}
