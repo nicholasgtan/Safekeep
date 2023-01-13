@@ -53,6 +53,27 @@ export const getUser = async (id: string): Promise<UserNoPw | null> => {
   });
 };
 
+export const getUserSession = async (email: string): Promise<User | null> => {
+  return prisma.user.findUnique({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      password: true,
+      client: {
+        select: {
+          name: true,
+        },
+      },
+      clientId: true,
+    },
+  });
+};
+
 export const createUser = async (user: Omit<User, "id">): Promise<User> => {
   const { email, firstName, lastName, password, clientId } = user;
   return prisma.user.create({
