@@ -2,15 +2,20 @@ import prisma from "../utils/prismaConnection";
 import express from "express";
 import type { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
+import { UserBasicInfo } from "./userController";
 
-type Client = {
-  id: string;
+export interface ClientName {
   name: string;
+}
+
+export interface Client extends ClientName {
+  id: string;
   type: string;
   cashBalance: number;
   equityBalance: number;
   fixedIncomeBal: number;
-};
+  userList?: UserBasicInfo[];
+}
 
 // Services
 const listClients = async (): Promise<Client[]> => {
@@ -22,6 +27,13 @@ const listClients = async (): Promise<Client[]> => {
       cashBalance: true,
       equityBalance: true,
       fixedIncomeBal: true,
+      userList: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };
@@ -30,6 +42,15 @@ const getClient = async (id: string): Promise<Client | null> => {
   return prisma.client.findUnique({
     where: {
       id,
+    },
+    include: {
+      userList: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };
@@ -90,9 +111,8 @@ const deleteClient = async (id: string): Promise<void> => {
   });
 };
 
-export const clientRouter = express.Router();
-
 // Routing
+export const clientRouter = express.Router();
 
 //GET: List of all Clients
 clientRouter.get("/", async (request: Request, response: Response) => {
@@ -104,7 +124,7 @@ clientRouter.get("/", async (request: Request, response: Response) => {
   }
 });
 
-//GET: A single Client by ID
+//GET: A single Client by Id
 clientRouter.get("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;
   try {
