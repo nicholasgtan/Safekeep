@@ -190,8 +190,10 @@ clientRouter.delete("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;
   try {
     await deleteClient(id);
-    return response.status(204).json("Client has been succesfully deleted");
+    return response
+      .status(202)
+      .json({ msg: "Client has been succesfully deleted" });
   } catch (error: any) {
-    return response.status(500).json(error.message);
+    return response.status(500).json({ msg: "Client does not exist" });
   }
 });
