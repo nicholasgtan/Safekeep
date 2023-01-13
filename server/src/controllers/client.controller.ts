@@ -10,8 +10,8 @@ clientRouter.get("/", async (request: Request, response: Response) => {
   try {
     const clients = await ClientService.listClients();
     return response.status(200).json(clients);
-  } catch (error: any) {
-    return response.status(500).json(error.message);
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });
 
@@ -24,8 +24,8 @@ clientRouter.get("/:id", async (request: Request, response: Response) => {
       return response.status(200).json(client);
     }
     return response.status(404).json("Client not found");
-  } catch (error: any) {
-    return response.status(500).json(error.message);
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });
 
@@ -46,8 +46,8 @@ clientRouter.post(
       const client = request.body;
       const newClient = await ClientService.createClient(client);
       return response.status(201).json(newClient);
-    } catch (error: any) {
-      return response.status(500).json(error.message);
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
     }
   }
 );
@@ -70,8 +70,8 @@ clientRouter.put(
       const client = request.body;
       const updatedClient = await ClientService.updateClient(client, id);
       return response.status(200).json(updatedClient);
-    } catch (error: any) {
-      return response.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
     }
   }
 );
@@ -84,7 +84,7 @@ clientRouter.delete("/:id", async (request: Request, response: Response) => {
     return response
       .status(202)
       .json({ msg: "Client has been succesfully deleted" });
-  } catch (error: any) {
-    return response.status(500).json({ msg: "Client does not exist" });
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });

@@ -1,4 +1,4 @@
-import prisma from "../utils/prismaConnection";
+import prisma from "../utils/prisma.connection";
 import { ClientName } from "./client.service";
 
 export interface UserBasicInfo {

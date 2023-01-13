@@ -10,8 +10,8 @@ userRouter.get("/", async (request: Request, response: Response) => {
   try {
     const users = await UserService.listUsers();
     return response.status(200).json(users);
-  } catch (error: any) {
-    return response.status(500).json(error.message);
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });
 
@@ -24,8 +24,8 @@ userRouter.get("/:id", async (request: Request, response: Response) => {
       return response.status(200).json(user);
     }
     return response.status(404).json("User not found");
-  } catch (error: any) {
-    return response.status(500).json(error.message);
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });
 
@@ -46,8 +46,8 @@ userRouter.post(
       const user = request.body;
       const newUser = await UserService.createUser(user);
       return response.status(201).json(newUser);
-    } catch (error: any) {
-      return response.status(500).json(error.message);
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
     }
   }
 );
@@ -70,8 +70,8 @@ userRouter.put(
       const user = request.body;
       const updatedUser = await UserService.updateUser(user, id);
       return response.status(200).json(updatedUser);
-    } catch (error: any) {
-      return response.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
     }
   }
 );
@@ -84,7 +84,7 @@ userRouter.delete("/:id", async (request: Request, response: Response) => {
     return response
       .status(202)
       .json({ msg: "User has been successfully deleted" });
-  } catch (error: any) {
-    return response.status(500).json({ msg: "User does not exist" });
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
   }
 });
