@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 import express from "express";
 
-import { clientRouter } from "./controllers/clientController";
-import { userRouter } from "./controllers/userController";
+import { clientRouter } from "./controllers/client.controller";
+import { userRouter } from "./controllers/user.controller";
 
 dotenv.config();
 
