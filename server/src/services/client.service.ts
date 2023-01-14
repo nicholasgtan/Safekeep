@@ -5,7 +5,13 @@ import prisma from "../utils/prisma.connection";
 export const listClients = async (): Promise<Client[]> => {
   return prisma.client.findMany({
     include: {
-      account: true,
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+        },
+      },
       userList: {
         select: {
           email: true,
@@ -13,7 +19,13 @@ export const listClients = async (): Promise<Client[]> => {
           lastName: true,
         },
       },
-      accountRep: true,
+      accountRep: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };
@@ -24,7 +36,13 @@ export const getClientById = async (id: string): Promise<Client | null> => {
       id,
     },
     include: {
-      account: true,
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+        },
+      },
       userList: {
         select: {
           email: true,
@@ -32,7 +50,13 @@ export const getClientById = async (id: string): Promise<Client | null> => {
           lastName: true,
         },
       },
-      accountRep: true,
+      accountRep: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };
@@ -47,7 +71,13 @@ export const createClient = async (
       type,
     },
     include: {
-      account: true,
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+        },
+      },
       userList: {
         select: {
           email: true,
@@ -55,7 +85,13 @@ export const createClient = async (
           lastName: true,
         },
       },
-      accountRep: true,
+      accountRep: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };
@@ -75,7 +111,13 @@ export const updateClientById = async (
       accountRepId,
     },
     include: {
-      account: true,
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+        },
+      },
       userList: {
         select: {
           email: true,
@@ -83,7 +125,13 @@ export const updateClientById = async (
           lastName: true,
         },
       },
-      accountRep: true,
+      accountRep: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
     },
   });
 };

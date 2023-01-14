@@ -5,7 +5,15 @@ import prisma from "../utils/prisma.connection";
 export const listTrade = async (): Promise<Trade[]> => {
   return prisma.trade.findMany({
     include: {
-      custodyAccount: true,
+      custodyAccount: {
+        select: {
+          client: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -16,7 +24,15 @@ export const getTrade = async (id: string): Promise<Trade | null> => {
       id,
     },
     include: {
-      custodyAccount: true,
+      custodyAccount: {
+        select: {
+          client: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -40,7 +56,15 @@ export const createTrade = async (trade: Omit<Trade, "id">): Promise<Trade> => {
       custodyAccountId,
     },
     include: {
-      custodyAccount: true,
+      custodyAccount: {
+        select: {
+          client: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -72,7 +96,15 @@ export const updateTrade = async (
       custodyAccountId,
     },
     include: {
-      custodyAccount: true,
+      custodyAccount: {
+        select: {
+          client: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 };

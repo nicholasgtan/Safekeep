@@ -9,7 +9,15 @@ export const clientRouter = express.Router();
 clientRouter.get("/", async (request: Request, response: Response) => {
   try {
     const clients = await ClientService.listClients();
-    return response.status(200).json(clients);
+    const bigIntSerialized = () => {
+      return JSON.parse(
+        JSON.stringify(
+          clients,
+          (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+        )
+      );
+    };
+    return response.status(200).json(bigIntSerialized());
   } catch (error: unknown) {
     return response.status(500).json({ error });
   }
@@ -21,7 +29,16 @@ clientRouter.get("/:id", async (request: Request, response: Response) => {
   try {
     const client = await ClientService.getClientById(id);
     if (client) {
-      return response.status(200).json(client);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            client,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
     }
     return response.status(404).json("Client not found");
   } catch (error: unknown) {
@@ -34,9 +51,6 @@ clientRouter.post(
   "/",
   body("name").isString(),
   body("type").isString(),
-  body("cashBalance").isInt({ min: 0 }),
-  body("equityBalance").isInt({ min: 0 }),
-  body("fixedIncomeBal").isInt({ min: 0 }),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -45,7 +59,16 @@ clientRouter.post(
     try {
       const client = request.body;
       const newClient = await ClientService.createClient(client);
-      return response.status(201).json(newClient);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            newClient,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(201).json(bigIntSerialized());
     } catch (error: unknown) {
       return response.status(500).json({ error });
     }
@@ -57,9 +80,6 @@ clientRouter.put(
   "/:id",
   body("name").isString().optional({ checkFalsy: true }),
   body("type").isString().optional({ checkFalsy: true }),
-  body("cashBalance").isInt({ min: 0 }).optional({ checkFalsy: true }),
-  body("equityBalance").isInt({ min: 0 }).optional({ checkFalsy: true }),
-  body("fixedIncomeBal").isInt({ min: 0 }).optional({ checkFalsy: true }),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -69,7 +89,16 @@ clientRouter.put(
     try {
       const client = request.body;
       const updatedClient = await ClientService.updateClientById(client, id);
-      return response.status(200).json(updatedClient);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            updatedClient,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
     } catch (error: unknown) {
       return response.status(500).json({ error });
     }

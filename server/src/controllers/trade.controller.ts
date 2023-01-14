@@ -9,7 +9,15 @@ export const tradeRouter = express.Router();
 tradeRouter.get("/", async (request: Request, response: Response) => {
   try {
     const trades = await TradeService.listTrade();
-    return response.status(200).json(trades);
+    const bigIntSerialized = () => {
+      return JSON.parse(
+        JSON.stringify(
+          trades,
+          (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+        )
+      );
+    };
+    return response.status(200).json(bigIntSerialized());
   } catch (error: unknown) {
     return response.status(500).json({ error });
   }
@@ -21,7 +29,16 @@ tradeRouter.get("/:id", async (request: Request, response: Response) => {
   try {
     const trade = await TradeService.getTrade(id);
     if (trade) {
-      return response.status(200).json(trade);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            trade,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
     }
     return response.status(404).json("Trade not found");
   } catch (error: unknown) {
@@ -32,9 +49,9 @@ tradeRouter.get("/:id", async (request: Request, response: Response) => {
 //* POST: Create a Trade
 tradeRouter.post(
   "/",
-  body("clientId").isString(),
-  //   body("tradeDate").isDate(),
-  //   body("settlementDate").isDate(),
+  body("custodyAccountId").isString(),
+  body("tradeDate").isISO8601(),
+  body("settlementDate").isISO8601(),
   body("stockType").isString().isIn(["equity", "fixedIncome"]),
   body("settlementAmt").isInt({ min: 0 }),
   body("position").isString().isIn(["buy", "sell"]),
@@ -47,7 +64,16 @@ tradeRouter.post(
     try {
       const trade = request.body;
       const newTrade = await TradeService.createTrade(trade);
-      return response.status(201).json(newTrade);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            newTrade,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(201).json(bigIntSerialized());
     } catch (error: unknown) {
       return response.status(500).json({ error });
     }
@@ -57,9 +83,9 @@ tradeRouter.post(
 //* PUT: Update a Trade by id
 tradeRouter.put(
   "/:id",
-  body("clientId").isString().optional({ checkFalsy: true }),
-  body("tradeDate").isDate().optional({ checkFalsy: true }),
-  body("settlementDate").isDate().optional({ checkFalsy: true }),
+  body("custodyAccountId").isString().optional({ checkFalsy: true }),
+  body("tradeDate").isISO8601().optional({ checkFalsy: true }),
+  body("settlementDate").isISO8601().optional({ checkFalsy: true }),
   body("stockType")
     .isString()
     .isIn(["equity", "fixedIncome"])
@@ -79,7 +105,16 @@ tradeRouter.put(
     try {
       const trade = request.body;
       const updatedTrade = await TradeService.updateTrade(trade, id);
-      return response.status(200).json(updatedTrade);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            updatedTrade,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
     } catch (error: unknown) {
       return response.status(500).json({ error });
     }

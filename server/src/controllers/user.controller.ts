@@ -37,7 +37,11 @@ userRouter.post(
   body("firstName").isString(),
   body("lastName").isString(),
   body("password").isString(),
-  body("clientId").isString(),
+  body("userClientId").isString().optional({ checkFalsy: true }),
+  body("role")
+    .isString()
+    .isIn(["client", "admin"])
+    .optional({ checkFalsy: true }),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -70,7 +74,7 @@ userRouter.put(
   body("firstName").isString().optional({ checkFalsy: true }),
   body("lastName").isString().optional({ checkFalsy: true }),
   body("password").isString().optional({ checkFalsy: true }),
-  body("clientId").isString().optional({ checkFalsy: true }),
+  body("userClientId").isString().optional({ checkFalsy: true }),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

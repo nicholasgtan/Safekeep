@@ -24,6 +24,11 @@ const sess = {
   },
 };
 
+JSON.stringify(
+  this,
+  (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+);
+
 const app = express();
 //* Middleware
 app.use(express.json());
