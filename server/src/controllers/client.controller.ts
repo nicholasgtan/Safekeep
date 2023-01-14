@@ -34,9 +34,9 @@ clientRouter.post(
   "/",
   body("name").isString(),
   body("type").isString(),
-  body("cashBalance").isNumeric(),
-  body("equityBalance").isNumeric(),
-  body("fixedIncomeBal").isNumeric(),
+  body("cashBalance").isInt({ min: 0 }),
+  body("equityBalance").isInt({ min: 0 }),
+  body("fixedIncomeBal").isInt({ min: 0 }),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

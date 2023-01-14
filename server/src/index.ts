@@ -5,6 +5,7 @@ import session from "express-session";
 import { clientRouter } from "./controllers/client.controller";
 import { userRouter } from "./controllers/user.controller";
 import { sessionRouter } from "./controllers/session.controller";
+import { tradeRouter } from "./controllers/trade.controller";
 
 dotenv.config();
 if (!process.env.PORT) {
@@ -35,6 +36,7 @@ app.use(session(sess));
 app.use("/api/clients", clientRouter);
 app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter);
+app.use("/api/trades", tradeRouter);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);

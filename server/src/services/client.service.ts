@@ -1,18 +1,5 @@
+import { Client } from "@prisma/client";
 import prisma from "../utils/prisma.connection";
-import { UserBasicInfo } from "./user.service";
-
-export interface ClientName {
-  name: string;
-}
-
-export interface Client extends ClientName {
-  id: string;
-  type: string;
-  cashBalance: number;
-  equityBalance: number;
-  fixedIncomeBal: number;
-  userList?: UserBasicInfo[];
-}
 
 //* Services
 export const listClients = async (): Promise<Client[]> => {

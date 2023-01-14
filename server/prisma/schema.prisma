@@ -48,15 +48,15 @@ model Client {
 }
 
 model Trade {
-  id String @id @default(uuid())
-  client         Client  @relation(fields: [clientId], references: [id])
-  clientId       String  @unique
-  tradeDate      DateTime
-  settlementDate DateTime
-  stockType      Stock @default(equity)
-  settlementAmt  Int
-  position       Position @default(buy)    
-  onTime         OnTime @default(no)
+  id              String @id @default(uuid())
+  client          Client  @relation(fields: [clientId], references: [id])
+  clientId        String  
+  tradeDate       DateTime @db.Date
+  settlementDate  DateTime @db.Date
+  stockType       Stock @default(equity)
+  settlementAmt   Int
+  position        Position @default(buy)    
+  onTime          OnTime @default(no)
 }
 
 enum Stock {

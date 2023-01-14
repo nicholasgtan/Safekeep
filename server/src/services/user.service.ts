@@ -1,30 +1,48 @@
+import { Prisma, User } from "@prisma/client";
 import prisma from "../utils/prisma.connection";
-import { ClientName } from "./client.service";
 
-export interface UserBasicInfo {
-  email: string;
-  firstName: string;
-  lastName: string;
-}
+const userWithClientName = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    id: true,
+    email: true,
+    firstName: true,
+    lastName: true,
+    password: true,
+    client: {
+      select: {
+        name: true,
+      },
+    },
+  },
+});
 
-export interface UserNoPw extends UserBasicInfo {
-  id: string;
-  client?: ClientName;
-}
+type UserWithClientName = Prisma.UserGetPayload<typeof userWithClientName>;
 
-export interface User extends UserNoPw {
-  password: string;
-  clientId: string;
-}
+const userNoPw = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    id: true,
+    email: true,
+    firstName: true,
+    lastName: true,
+    client: {
+      select: {
+        name: true,
+      },
+    },
+  },
+});
+
+type UserNoPw = Prisma.UserGetPayload<typeof userNoPw>;
 
 //* Services
-export const listUsers = async (): Promise<UserNoPw[]> => {
+export const listUsers = async (): Promise<UserWithClientName[]> => {
   return prisma.user.findMany({
     select: {
       id: true,
       email: true,
       firstName: true,
       lastName: true,
+      password: true,
       client: {
         select: {
           name: true,
