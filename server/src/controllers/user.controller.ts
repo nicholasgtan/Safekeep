@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import * as UserService from "../services/user.service";
+import bcrypt from "bcrypt";
 
 //* Routing
 export const userRouter = express.Router();
@@ -43,8 +44,16 @@ userRouter.post(
       return response.status(400).json({ errors: errors.array() });
     }
     try {
-      const user = request.body;
-      const newUser = await UserService.createUser(user);
+      const saltRounds = 10;
+      const { email, firstName, lastName, password, clientId } = request.body;
+      const hashed = bcrypt.hashSync(password, saltRounds);
+      const newUser = await UserService.createUser({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        password: hashed,
+        clientId: clientId,
+      });
       return response.status(201).json(newUser);
     } catch (error: unknown) {
       return response.status(500).json({ error });

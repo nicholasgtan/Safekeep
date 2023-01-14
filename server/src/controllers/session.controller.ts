@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import { getUserSession } from "../services/user.service";
+import bcrypt from "bcrypt";
 
 export const sessionRouter = express.Router();
 
@@ -17,7 +18,7 @@ declare module "express-session" {
 sessionRouter.post(
   "/",
   body("email").isString(),
-  //   body("password").isString(),
+  body("password").isString(),
   async (request: Request, response: Response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -31,12 +32,15 @@ sessionRouter.post(
           .status(401)
           .json({ msg: "Email not valid, please sign up." });
       }
-      // const passwordNotMatched = !bcrypt.compareSync(password, foundUser.password);
-      // if (passwordNotMatched) {
-      //   return response
-      //     .status(401)
-      //     .json({ msg: "Password not valid, please try again." });
-      // }
+      const passwordNotMatched = !bcrypt.compareSync(
+        password,
+        foundUser.password
+      );
+      if (passwordNotMatched) {
+        return response
+          .status(401)
+          .json({ msg: "Password not valid, please try again." });
+      }
       request.session.authenticated = true;
       request.session.currentUser = foundUser.id;
       request.session.msg = "Logged in";
