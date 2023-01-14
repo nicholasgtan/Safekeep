@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
+import helmet from "helmet";
 
 import { clientRouter } from "./controllers/client.controller";
 import { accountRouter } from "./controllers/account.controller";
@@ -24,14 +25,11 @@ const sess = {
   },
 };
 
-JSON.stringify(
-  this,
-  (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
-);
-
 const app = express();
 //* Middleware
 app.use(express.json());
+
+app.use(helmet());
 
 if (app.get("env") === "production") {
   app.set("trust proxy", 1); // trust first proxy

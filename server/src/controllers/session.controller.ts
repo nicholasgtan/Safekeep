@@ -10,6 +10,7 @@ declare module "express-session" {
   interface SessionData {
     authenticated: boolean;
     currentUser: string;
+    role: string;
     msg: string;
   }
 }
@@ -43,6 +44,7 @@ sessionRouter.post(
       }
       request.session.authenticated = true;
       request.session.currentUser = foundUser.id;
+      request.session.role = foundUser.role;
       request.session.msg = "Logged in";
       response.status(202).json(request.session);
     } catch (error: unknown) {
