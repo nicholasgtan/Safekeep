@@ -1,79 +1,34 @@
-import { Prisma, Trade } from "@prisma/client";
+import { Trade } from "@prisma/client";
 import prisma from "../utils/prisma.connection";
 
-const tradeWithClientName = Prisma.validator<Prisma.TradeArgs>()({
-  select: {
-    id: true,
-    tradeDate: true,
-    settlementDate: true,
-    stockType: true,
-    settlementAmt: true,
-    position: true,
-    onTime: true,
-    client: {
-      select: {
-        name: true,
-      },
-    },
-  },
-});
-
-type TradeWithClientName = Prisma.TradeGetPayload<typeof tradeWithClientName>;
-
 //* Services
-export const listTrade = async (): Promise<TradeWithClientName[]> => {
+export const listTrade = async (): Promise<Trade[]> => {
   return prisma.trade.findMany({
-    select: {
-      id: true,
-      tradeDate: true,
-      settlementDate: true,
-      stockType: true,
-      settlementAmt: true,
-      position: true,
-      onTime: true,
-      client: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      custodyAccount: true,
     },
   });
 };
 
-export const getTrade = async (
-  id: string
-): Promise<TradeWithClientName | null> => {
+export const getTrade = async (id: string): Promise<Trade | null> => {
   return prisma.trade.findUnique({
     where: {
       id,
     },
-    select: {
-      id: true,
-      tradeDate: true,
-      settlementDate: true,
-      stockType: true,
-      settlementAmt: true,
-      position: true,
-      onTime: true,
-      client: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      custodyAccount: true,
     },
   });
 };
 
-export const createTrade = async (
-  trade: Omit<Trade, "id">
-): Promise<TradeWithClientName> => {
+export const createTrade = async (trade: Omit<Trade, "id">): Promise<Trade> => {
   const {
     tradeDate,
     settlementDate,
     stockType,
     settlementAmt,
     position,
-    clientId,
+    custodyAccountId,
   } = trade;
   return prisma.trade.create({
     data: {
@@ -82,21 +37,10 @@ export const createTrade = async (
       stockType,
       settlementAmt,
       position,
-      clientId,
+      custodyAccountId,
     },
-    select: {
-      id: true,
-      tradeDate: true,
-      settlementDate: true,
-      stockType: true,
-      settlementAmt: true,
-      position: true,
-      onTime: true,
-      client: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      custodyAccount: true,
     },
   });
 };
@@ -104,7 +48,7 @@ export const createTrade = async (
 export const updateTrade = async (
   trade: Omit<Trade, "id">,
   id: string
-): Promise<TradeWithClientName> => {
+): Promise<Trade> => {
   const {
     tradeDate,
     settlementDate,
@@ -112,7 +56,7 @@ export const updateTrade = async (
     settlementAmt,
     position,
     onTime,
-    clientId,
+    custodyAccountId,
   } = trade;
   return prisma.trade.update({
     where: {
@@ -125,21 +69,10 @@ export const updateTrade = async (
       settlementAmt,
       position,
       onTime,
-      clientId,
+      custodyAccountId,
     },
-    select: {
-      id: true,
-      tradeDate: true,
-      settlementDate: true,
-      stockType: true,
-      settlementAmt: true,
-      position: true,
-      onTime: true,
-      client: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      custodyAccount: true,
     },
   });
 };

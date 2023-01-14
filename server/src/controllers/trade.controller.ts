@@ -48,8 +48,8 @@ tradeRouter.post(
       const trade = request.body;
       const newTrade = await TradeService.createTrade(trade);
       return response.status(201).json(newTrade);
-    } catch (error: any) {
-      return response.status(500).json(error.message);
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
     }
   }
 );

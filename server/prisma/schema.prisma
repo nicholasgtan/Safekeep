@@ -15,48 +15,54 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+//* Models
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  firstName String
-  lastName  String
-  password  String
-  client    Client  @relation(fields: [clientId], references: [id])
-  clientId  String  
+  id            String  @id @default(uuid())
+  email         String  @unique
+  firstName     String
+  lastName      String
+  password      String
+  role          Role    @default(client)
+  userClient    Client? @relation("UserList", fields: [userClientId], references: [id])
+  userClientId  String?
+  accRepClient  Client[]
 }
 
-model Admin {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  firstName String
-  lastName  String
-  password  String
-  client    Client  @relation(fields: [clientId], references: [id])
-  clientId  String  @unique
+enum Role {
+  client
+  admin
 }
 
 model Client {
   id              String @id @default(uuid())
   name            String
   type            String
-  cashBalance     Int
-  equityBalance   Int
-  fixedIncomeBal  Int
+  account         Account?
+  userList        User[] @relation("UserList")
+  accountRep      User? @relation(fields: [accountRepId], references: [id])
+  accountRepId    String?
+}
+
+model Account {
+  id String @id @default(uuid())
+  cashBalance     BigInt
+  equityBalance   BigInt
+  fixedIncomeBal  BigInt
+  client          Client @relation(fields: [clientId], references: [id])
+  clientId        String @unique
   Trade           Trade[]
-  userList        User[]
-  accountRep      Admin?
 }
 
 model Trade {
-  id              String @id @default(uuid())
-  client          Client  @relation(fields: [clientId], references: [id])
-  clientId        String  
-  tradeDate       DateTime @db.Date
-  settlementDate  DateTime @db.Date
-  stockType       Stock @default(equity)
-  settlementAmt   Int
-  position        Position @default(buy)    
-  onTime          OnTime @default(no)
+  id                String @id @default(uuid())
+  tradeDate         DateTime @db.Date
+  settlementDate    DateTime @db.Date
+  stockType         Stock @default(equity)
+  settlementAmt     BigInt
+  position          Position @default(buy)    
+  onTime            OnTime?
+  custodyAccount    Account  @relation(fields: [custodyAccountId], references: [id])
+  custodyAccountId  String 
 }
 
 enum Stock {

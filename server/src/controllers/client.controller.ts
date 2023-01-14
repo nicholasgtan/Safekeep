@@ -19,7 +19,7 @@ clientRouter.get("/", async (request: Request, response: Response) => {
 clientRouter.get("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;
   try {
-    const client = await ClientService.getClient(id);
+    const client = await ClientService.getClientById(id);
     if (client) {
       return response.status(200).json(client);
     }
@@ -68,7 +68,7 @@ clientRouter.put(
     const id: string = request.params.id;
     try {
       const client = request.body;
-      const updatedClient = await ClientService.updateClient(client, id);
+      const updatedClient = await ClientService.updateClientById(client, id);
       return response.status(200).json(updatedClient);
     } catch (error: unknown) {
       return response.status(500).json({ error });

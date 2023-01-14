@@ -9,7 +9,7 @@ export const userRouter = express.Router();
 //* GET: List of all Clients
 userRouter.get("/", async (request: Request, response: Response) => {
   try {
-    const users = await UserService.listUsers();
+    const users = await UserService.adminListUsers();
     return response.status(200).json(users);
   } catch (error: unknown) {
     return response.status(500).json({ error });
@@ -20,7 +20,7 @@ userRouter.get("/", async (request: Request, response: Response) => {
 userRouter.get("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;
   try {
-    const user = await UserService.getUser(id);
+    const user = await UserService.ClientGetUserById(id);
     if (user) {
       return response.status(200).json(user);
     }
@@ -45,14 +45,16 @@ userRouter.post(
     }
     try {
       const saltRounds = 10;
-      const { email, firstName, lastName, password, clientId } = request.body;
+      const { email, firstName, lastName, password, role, userClientId } =
+        request.body;
       const hashed = bcrypt.hashSync(password, saltRounds);
-      const newUser = await UserService.createUser({
+      const newUser = await UserService.adminCreateUser({
         email: email,
         firstName: firstName,
         lastName: lastName,
         password: hashed,
-        clientId: clientId,
+        role,
+        userClientId: userClientId,
       });
       return response.status(201).json(newUser);
     } catch (error: unknown) {
@@ -77,7 +79,7 @@ userRouter.put(
     const id: string = request.params.id;
     try {
       const user = request.body;
-      const updatedUser = await UserService.updateUser(user, id);
+      const updatedUser = await UserService.adminUpdateUser(user, id);
       return response.status(200).json(updatedUser);
     } catch (error: unknown) {
       return response.status(500).json({ error });

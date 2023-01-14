@@ -4,13 +4,8 @@ import prisma from "../utils/prisma.connection";
 //* Services
 export const listClients = async (): Promise<Client[]> => {
   return prisma.client.findMany({
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      cashBalance: true,
-      equityBalance: true,
-      fixedIncomeBal: true,
+    include: {
+      account: true,
       userList: {
         select: {
           email: true,
@@ -18,16 +13,18 @@ export const listClients = async (): Promise<Client[]> => {
           lastName: true,
         },
       },
+      accountRep: true,
     },
   });
 };
 
-export const getClient = async (id: string): Promise<Client | null> => {
+export const getClientById = async (id: string): Promise<Client | null> => {
   return prisma.client.findUnique({
     where: {
       id,
     },
     include: {
+      account: true,
       userList: {
         select: {
           email: true,
@@ -35,6 +32,7 @@ export const getClient = async (id: string): Promise<Client | null> => {
           lastName: true,
         },
       },
+      accountRep: true,
     },
   });
 };
@@ -42,31 +40,31 @@ export const getClient = async (id: string): Promise<Client | null> => {
 export const createClient = async (
   client: Omit<Client, "id">
 ): Promise<Client> => {
-  const { name, type, cashBalance, equityBalance, fixedIncomeBal } = client;
+  const { name, type } = client;
   return prisma.client.create({
     data: {
       name,
       type,
-      cashBalance,
-      equityBalance,
-      fixedIncomeBal,
     },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      cashBalance: true,
-      equityBalance: true,
-      fixedIncomeBal: true,
+    include: {
+      account: true,
+      userList: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+      accountRep: true,
     },
   });
 };
 
-export const updateClient = async (
+export const updateClientById = async (
   client: Omit<Client, "id">,
   id: string
 ): Promise<Client> => {
-  const { name, type, cashBalance, equityBalance, fixedIncomeBal } = client;
+  const { name, type, accountRepId } = client;
   return prisma.client.update({
     where: {
       id,
@@ -74,17 +72,18 @@ export const updateClient = async (
     data: {
       name,
       type,
-      cashBalance,
-      equityBalance,
-      fixedIncomeBal,
+      accountRepId,
     },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      cashBalance: true,
-      equityBalance: true,
-      fixedIncomeBal: true,
+    include: {
+      account: true,
+      userList: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+      accountRep: true,
     },
   });
 };
