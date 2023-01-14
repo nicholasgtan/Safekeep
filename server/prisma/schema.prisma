@@ -50,7 +50,7 @@ model Account {
   fixedIncomeBal  BigInt
   client          Client @relation(fields: [clientId], references: [id])
   clientId        String @unique
-  Trade           Trade[]
+  trade           Trade[]
 }
 
 model Trade {

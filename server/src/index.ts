@@ -3,6 +3,7 @@ import express from "express";
 import session from "express-session";
 
 import { clientRouter } from "./controllers/client.controller";
+import { accountRouter } from "./controllers/account.controller";
 import { userRouter } from "./controllers/user.controller";
 import { sessionRouter } from "./controllers/session.controller";
 import { tradeRouter } from "./controllers/trade.controller";
@@ -34,6 +35,7 @@ if (app.get("env") === "production") {
 app.use(session(sess));
 
 app.use("/api/clients", clientRouter);
+app.use("/api/accounts", accountRouter);
 app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/trades", tradeRouter);
