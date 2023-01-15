@@ -1,4 +1,4 @@
-import { Prisma, User } from "@prisma/client";
+import { Client, Prisma, User } from "@prisma/client";
 import prisma from "../utils/prisma.connection";
 
 //* Services
@@ -116,6 +116,31 @@ export const adminUpdateUser = async (
           name: true,
         },
       },
+      accRepClient: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+};
+
+export const adminAddClient = async (
+  client: Client,
+  id: string
+): Promise<User> => {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      accRepClient: {
+        connect: {
+          id: client.id,
+        },
+      },
+    },
+    include: {
       accRepClient: {
         select: {
           name: true,

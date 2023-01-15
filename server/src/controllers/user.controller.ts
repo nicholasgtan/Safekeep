@@ -24,7 +24,7 @@ userRouter.get("/:id", async (request: Request, response: Response) => {
     if (user) {
       return response.status(200).json(user);
     }
-    return response.status(404).json("User not found");
+    return response.status(404).json({ msg: "User not found" });
   } catch (error: unknown) {
     return response.status(500).json({ error });
   }
@@ -85,6 +85,30 @@ userRouter.put(
       const user = request.body;
       const updatedUser = await UserService.adminUpdateUser(user, id);
       return response.status(200).json(updatedUser);
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+//* PUT: Assign Client to Admin by Id
+userRouter.put(
+  "/admin/:id",
+  body("id").isString(),
+  async (request: Request, response: Response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
+    const id: string = request.params.id;
+    try {
+      const user = request.body;
+      const updatedUser = await UserService.adminAddClient(user, id);
+      if (updatedUser.role === "admin") {
+        return response.status(200).json(updatedUser);
+      } else {
+        return response.status(401).json({ msg: "Unauthorized" });
+      }
     } catch (error: unknown) {
       return response.status(500).json({ error });
     }

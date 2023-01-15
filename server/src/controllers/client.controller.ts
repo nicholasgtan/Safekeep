@@ -46,7 +46,7 @@ clientRouter.get("/:id", async (request: Request, response: Response) => {
   }
 });
 
-//* POST: Create a Client
+//* POST: Create a Client without account
 clientRouter.post(
   "/",
   body("name").isString(),
@@ -63,6 +63,35 @@ clientRouter.post(
         return JSON.parse(
           JSON.stringify(
             newClient,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(201).json(bigIntSerialized());
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+//* POST: Create a Client and autocreate Account
+clientRouter.post(
+  "/auto",
+  body("name").isString(),
+  body("type").isString(),
+  async (request: Request, response: Response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const client = request.body;
+      const newClientWithAcc = await ClientService.createClientWithAcc(client);
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            newClientWithAcc,
             (key, value) =>
               typeof value === "bigint" ? value.toString() : value // return everything else unchanged
           )

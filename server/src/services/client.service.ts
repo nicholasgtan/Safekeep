@@ -96,6 +96,48 @@ export const createClient = async (
   });
 };
 
+export const createClientWithAcc = async (
+  client: Omit<Client, "id">
+): Promise<Client> => {
+  const { name, type } = client;
+  return prisma.client.create({
+    data: {
+      name,
+      type,
+      account: {
+        create: {
+          cashBalance: 0,
+          equityBalance: 0,
+          fixedIncomeBal: 0,
+        },
+      },
+    },
+    include: {
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+        },
+      },
+      userList: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+      accountRep: {
+        select: {
+          email: true,
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+};
+
 export const updateClientById = async (
   client: Omit<Client, "id">,
   id: string
