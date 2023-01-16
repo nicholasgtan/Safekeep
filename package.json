@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "install": "cd server && npm run build",
-    "prebuild": "cd client && npm run build",
-    "build": "cd server && npm run postbuild",
-    "postbuild": "cd client && npm run postbuild",
+    "build": "cd server && npm run build",
+    "postbuild": "cd client && npm run build",
     "start": "cd server && npm run start"
   },
   "repository": {
