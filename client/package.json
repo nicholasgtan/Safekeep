@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm install typescript --save-dev && tsc && vite build",
+    "build": "npm install typescript --save-dev && tsc && vite build && npm uninstall typescript",
     "preview": "vite preview"
   },
   "dependencies": {
