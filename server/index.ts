@@ -4,11 +4,11 @@ import express from "express";
 import session from "express-session";
 import helmet from "helmet";
 
-import { clientRouter } from "./controllers/client.controller";
-import { accountRouter } from "./controllers/account.controller";
-import { userRouter } from "./controllers/user.controller";
-import { sessionRouter } from "./controllers/session.controller";
-import { tradeRouter } from "./controllers/trade.controller";
+import { clientRouter } from "./src/controllers/client.controller";
+import { accountRouter } from "./src/controllers/account.controller";
+import { userRouter } from "./src/controllers/user.controller";
+import { sessionRouter } from "./src/controllers/session.controller";
+import { tradeRouter } from "./src/controllers/trade.controller";
 
 dotenv.config();
 if (!process.env.PORT) {
