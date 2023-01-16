@@ -2,10 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "ts-node ."
+    "build": "npm install typescript --save-dev && tsc -p .",
+    "start": "node ./dist/src/index.js"
   },
   "keywords": [],
   "author": "",
