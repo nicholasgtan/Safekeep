@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+import path from "path";
 import express from "express";
 import session from "express-session";
 import helmet from "helmet";
@@ -42,6 +43,10 @@ app.use("/api/accounts", accountRouter);
 app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter);
 app.use("/api/trades", tradeRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve("..", "..", "client", "dist", "index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
