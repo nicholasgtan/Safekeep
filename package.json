@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "install": "cd client && npm install typescript --save-dev",
-    "postinstall": "cd client && tsc",
-    "prebuild": "cd server && npm install typescript --save-dev",
-    "build": "cd server && tsc",
+    "prebuild": "cd server && npm install typescript --save-dev && tsc",
+    "build": "cd client && npm install typescript --save-dev && tsc",
     "postbuild": "cd client && npm run build",
     "start": "cd server && npm run start"
   },
