@@ -9,7 +9,8 @@ export const sessionRouter = express.Router();
 declare module "express-session" {
   interface SessionData {
     authenticated: boolean;
-    currentUser: string;
+    currentUserId: string;
+    currentUserName: string;
     role: string;
     msg: string;
   }
@@ -43,7 +44,8 @@ sessionRouter.post(
           .json({ msg: "Password not valid, please try again." });
       }
       request.session.authenticated = true;
-      request.session.currentUser = foundUser.id;
+      request.session.currentUserId = foundUser.id;
+      request.session.currentUserName = foundUser.firstName;
       request.session.role = foundUser.role;
       request.session.msg = "Logged in";
       response.status(202).json(request.session);
