@@ -1,4 +1,4 @@
-import { Trade } from "@prisma/client";
+import { Trade } from "../../../node_modules/.prisma/client";
 import prisma from "../utils/prisma.connection";
 
 //* Services
