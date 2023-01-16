@@ -4,8 +4,12 @@
   "description": "",
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "cd server && npm install typescript --save-dev && tsc -p . && npm run start"
+    "start": "cd server && npm run start"
   },
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nicholasgtan/project4.git"
