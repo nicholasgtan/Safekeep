@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "tsc -p . && node ./dist/src/index.js"
+    "start": "npm install typescript --save-dev && tsc -p . && node ./dist/src/index.js"
   },
   "keywords": [],
   "author": "",
