@@ -8,7 +8,7 @@ const NavBar = () => {
     <div style={{display: "flex", flexDirection: "column"}}>
       <div style={{display: "flex", justifyContent: "space-between"}}>
         <div>Logo</div>
-        <div style={{display:"flex"}}>
+        <div style={{display:"flex", gap: "0.2rem"}}>
         <Login setStatus={setStatus} />
         <button>Logout</button>
         </div>

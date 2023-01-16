@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import axios from "axios";
 import { loginSchema } from "./Formik/yup.schema";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface NavStatusProps {
     setStatus: Dispatch<SetStateAction<string>>;
@@ -24,9 +24,12 @@ interface LoginFormValues {
     password: string;
 }
 
+const [loading, setLoading] = useState<boolean>(false);
+
 const handleLogin = async (values : LoginFormValues) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
     try {
+        setLoading(true);
         const { data } = await axios.post<SessionData>("/api/session", 
         values, 
         { headers: { 
@@ -34,6 +37,7 @@ const handleLogin = async (values : LoginFormValues) => {
             Accept: "application/json", }
         })
         console.log(JSON.stringify(data, null, 4));
+        setLoading(false);
         if (data.authenticated === true) {
             const loginStatus = data.msg.toLowerCase();
             if (data.role === "admin") {
@@ -44,6 +48,7 @@ const handleLogin = async (values : LoginFormValues) => {
             }
             return data;
         } catch (error) {
+        setLoading(false);
         if (axios.isAxiosError(error)) {
             console.log('error message: ', error.response?.data.msg);
             setStatus(error.response?.data.msg);
@@ -90,7 +95,7 @@ const initialValues: LoginFormValues = {
                 disabled={isSubmitting}
                 type="submit"
                 >
-                Log In
+                {loading ? <>Loading...</> : <>Log In</>}
               </button>
             </Form>
           )}
