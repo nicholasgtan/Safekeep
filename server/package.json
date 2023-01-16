@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "npm install typescript --save-dev && tsc && npm uninstall typescript",
+    "build": "npm install typescript --save-dev && tsc",
+    "postbuild": "npm uninstall typescript",
     "start": "node ./dist/src/index.js"
   },
   "keywords": [],
