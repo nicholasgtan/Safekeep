@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "cd server && npm run start"
+    "start": "cd server && npm install typescript --save-dev && tsc -p . && npm run start"
   },
   "repository": {
     "type": "git",
