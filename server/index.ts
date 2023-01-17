@@ -45,7 +45,7 @@ app.use("/api/session", sessionRouter);
 app.use("/api/trades", tradeRouter);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve("..", "..", "client", "dist", "index.html"));
+  res.sendFile(path.resolve("..", "client", "dist", "index.html"));
 });
 
 app.listen(PORT, () => {
