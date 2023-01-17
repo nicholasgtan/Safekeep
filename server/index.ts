@@ -29,6 +29,7 @@ const sess = {
 const app = express();
 //* Middleware
 app.use(express.json());
+app.use(express.static("../client/dist"));
 
 app.use(helmet());
 

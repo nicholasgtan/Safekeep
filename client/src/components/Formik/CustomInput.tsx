@@ -1,7 +1,7 @@
 import { useField } from "formik";
-import { CustomFieldProps } from "./CustomFieldProps";
+import type { CustomFieldProps } from "./CustomFieldProps";
 
-const CustomInput = ({ label, ...props }: CustomFieldProps ) => {
+const CustomInput = ({ label, ...props }: CustomFieldProps) => {
   const [field, meta] = useField(props);
   return (
     <>
