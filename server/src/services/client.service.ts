@@ -1,4 +1,4 @@
-import { Client } from "../../../node_modules/.prisma/client";
+import { Client } from "@prisma/client";
 import prisma from "../utils/prisma.connection";
 
 //* Services
