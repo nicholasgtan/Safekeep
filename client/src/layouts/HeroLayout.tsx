@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import PropTypes from "prop-types";
-import { styled } from "@mui/material/styles";
+import styled from "@mui/material/styles/styled";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 
