@@ -56,8 +56,10 @@ sessionRouter.post(
 );
 
 //* Session Logout
-sessionRouter.delete("/", (request: Request, response: Response) => {
-  request.session.destroy(() => {
-    response.json({ msg: "Logout success" });
+sessionRouter.get("/", (request: Request, response: Response) => {
+  request.session.destroy((err) => {
+    if (!err) {
+      response.status(202).json({ msg: "Logout success" });
+    }
   });
 });

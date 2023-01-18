@@ -1,0 +1,27 @@
+.MuiTextField-root input {
+  /* 8.5px = 18.5px - 10px (note: 18.5px is the input's default padding top and bottom) */
+  padding-top: 8.5px;
+  padding-bottom: 8.5px;
+}
+
+.MuiTextField-root label {
+  top: -10px;
+}
+
+.MuiTextField-root label[data-shrink="true"] {
+  top: 0;
+}
+
+.MuiSelect-root input {
+  /* 8.5px = 18.5px - 10px (note: 18.5px is the input's default padding top and bottom) */
+  padding-top: 8.5px;
+  padding-bottom: 8.5px;
+}
+
+.MuiSelect-root label {
+  top: -10px;
+}
+
+.MuiSelect-root label[data-shrink="true"] {
+  top: 0;
+}

@@ -1,20 +1,20 @@
 import { useField } from "formik";
 import type { CustomFieldProps } from "./CustomFieldProps";
+import { TextField } from "@mui/material/";
 
-const CustomSelect = ({ label, ...props }: CustomFieldProps) => {
+const CustomSelect = ({ ...props }: CustomFieldProps) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <label>{label}</label>
-      <br />
-      <input
+      <TextField
         {...field}
         {...props}
-        className={meta.touched && meta.error ? "input-error" : ""}
+        error={meta.touched && meta.error ? true : false}
+        helperText={
+          meta.touched &&
+          meta.error && <span className="error"> {meta.error} </span>
+        }
       />
-      {meta.touched && meta.error && (
-        <span className="error"> {meta.error} </span>
-      )}
     </>
   );
 };
