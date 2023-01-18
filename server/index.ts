@@ -1,4 +1,5 @@
-import * as dotenv from "dotenv";
+// import * as dotenv from "dotenv";
+import "dotenv/config";
 import path from "path";
 import express from "express";
 import session from "express-session";
@@ -10,7 +11,7 @@ import { userRouter } from "./src/controllers/user.controller";
 import { sessionRouter } from "./src/controllers/session.controller";
 import { tradeRouter } from "./src/controllers/trade.controller";
 
-dotenv.config();
+// dotenv.config();
 if (!process.env.PORT) {
   process.exit(1);
 }
