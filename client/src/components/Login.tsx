@@ -3,7 +3,8 @@ import CustomInput from "./Formik/CustomInput";
 import axios from "axios";
 import { loginSchema } from "./Formik/yup.schema";
 import { Dispatch, SetStateAction } from "react";
-import { Box, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import { useContext } from "react";
 import AuthAPI from "../utils/AuthAPI";
 

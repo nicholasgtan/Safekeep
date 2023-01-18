@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Login from "../components/Login";
 import axios from "axios";
-import { Typography, Button, AppBar, Toolbar, Box } from "@mui/material";
-import { useContext } from "react";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 import AuthAPI from "../utils/AuthAPI";
 
 const NavBar = () => {
