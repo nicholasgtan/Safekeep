@@ -191,6 +191,70 @@ export const ClientGetUserById = async (
   });
 };
 
+//* Client access Account Balance by id
+const clientAccountBal = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    email: true,
+    firstName: true,
+    lastName: true,
+    userClient: {
+      select: {
+        name: true,
+        accountRep: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        account: {
+          select: {
+            cashBalance: true,
+            equityBalance: true,
+            fixedIncomeBal: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+type ClientAccountBal = Prisma.UserGetPayload<typeof clientAccountBal>;
+
+export const ClientGetAccountBalanceById = async (
+  id: string
+): Promise<ClientAccountBal | null> => {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      email: true,
+      firstName: true,
+      lastName: true,
+      userClient: {
+        select: {
+          name: true,
+          accountRep: {
+            select: {
+              email: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          account: {
+            select: {
+              cashBalance: true,
+              equityBalance: true,
+              fixedIncomeBal: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 export const clientUpdateUser = async (
   user: Omit<ClientUserAccess, "id">,
   id: string

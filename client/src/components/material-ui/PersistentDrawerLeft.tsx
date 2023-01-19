@@ -23,6 +23,8 @@ import PeopleIcon from "@mui/icons-material/People";
 import KeyIcon from "@mui/icons-material/Key";
 import AuthAPI from "../../utils/AuthAPI";
 import { useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import Link from "@mui/material/Link";
 
 const drawerWidth = 255;
 
@@ -78,7 +80,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const { session } = useContext(AuthAPI);
 
   const handleDrawerOpen = () => {
@@ -90,22 +92,25 @@ export default function PersistentDrawerLeft() {
   };
 
   const standardDashboard = [
-    { name: "Dashboard", icon: DashboardIcon },
+    { name: "Dashboard", icon: DashboardIcon, navi: "dashboard" },
     {
       name: "Account Balance",
       icon: AccountBalanceIcon,
+      navi: "account",
     },
     {
       name: "Trades",
       icon: WaterfallChartIcon,
+      navi: "trade",
     },
   ];
 
   const adminDashboard = [
-    { name: "Clients", icon: PeopleIcon },
+    { name: "Clients", icon: PeopleIcon, navi: "clients" },
     {
       name: "Access",
       icon: KeyIcon,
+      navi: "access",
     },
   ];
 
@@ -166,14 +171,20 @@ export default function PersistentDrawerLeft() {
         <Divider />
         <List>
           {standardDashboard.map((list) => (
-            <ListItem key={list.name} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <list.icon />
-                </ListItemIcon>
-                <ListItemText primary={list.name} />
-              </ListItemButton>
-            </ListItem>
+            <NavLink
+              to={`/${list.navi}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+              key={list.navi}
+            >
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <list.icon />
+                  </ListItemIcon>
+                  <ListItemText primary={list.name} />
+                </ListItemButton>
+              </ListItem>
+            </NavLink>
           ))}
         </List>
         {session.role === "admin" ? (
@@ -181,7 +192,7 @@ export default function PersistentDrawerLeft() {
             <Divider />
             <List>
               {adminDashboard.map((list) => (
-                <ListItem key={list.name} disablePadding>
+                <ListItem key={list.navi} disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
                       <list.icon />

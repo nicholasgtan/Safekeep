@@ -5,6 +5,8 @@ import AuthAPI from "./utils/AuthAPI";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+import PrivateRoute from "./utils/PrivateRoutes";
+import AccountBal from "./components/AccountBal";
 
 function App() {
   interface SessionData {
@@ -24,7 +26,7 @@ function App() {
     msg: "",
   });
 
-  console.log(session);
+  // console.log(session);
 
   return (
     <AuthAPI.Provider value={{ session, setSession }}>
@@ -32,8 +34,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/client" element={<ClientDashboard />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/client" element={<ClientDashboard />} />
+              <Route path="/account" element={<AccountBal />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

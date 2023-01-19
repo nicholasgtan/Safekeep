@@ -105,7 +105,10 @@ const NavBar = () => {
             height: "2rem",
           }}
         >
-          <Typography variant="body2" sx={{ color: "#fff" }}>
+          <Typography
+            variant="body2"
+            sx={{ color: "#fff", paddingTop: "0.3rem", paddingRight: "1.3rem" }}
+          >
             {status}
           </Typography>
         </Box>
