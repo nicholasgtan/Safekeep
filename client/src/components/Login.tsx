@@ -67,6 +67,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
               loginStatus +
               "."
           );
+          navigate("/client");
         }
       }
       return data;

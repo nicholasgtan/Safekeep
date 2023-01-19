@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import AuthAPI from "../utils/AuthAPI";
 import { useNavigate } from "react-router-dom";
+import LogoIcon from "../components/material-ui/LogoIcon";
 
 const NavBar = () => {
   const [status, setStatus] = useState<string>("");
@@ -61,9 +62,22 @@ const NavBar = () => {
     >
       <Paper>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h3" sx={{ mt: 1 }}>
-            Safekeep
-          </Typography>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.3rem",
+            }}
+          >
+            <LogoIcon
+              color="inherit"
+              viewBox="0 0 120 120"
+              sx={{ height: "49px", width: "49px" }}
+            />
+            <Typography variant="h3" sx={{ mt: 1 }}>
+              Safekeep
+            </Typography>
+          </div>
           <div style={{ display: "flex", gap: "0.2rem" }}>
             {session.authenticated === false ? (
               <Login

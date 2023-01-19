@@ -4,6 +4,7 @@ import Layout from "./layouts/Layout";
 import AuthAPI from "./utils/AuthAPI";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 
 function App() {
   interface SessionData {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/client" element={<ClientDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

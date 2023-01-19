@@ -16,15 +16,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import WaterfallChartIcon from "@mui/icons-material/WaterfallChart";
 import PeopleIcon from "@mui/icons-material/People";
 import KeyIcon from "@mui/icons-material/Key";
+import AuthAPI from "../../utils/AuthAPI";
+import { useContext } from "react";
 
-const drawerWidth = 240;
+const drawerWidth = 255;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
@@ -79,6 +79,8 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const { session } = useContext(AuthAPI);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -110,7 +112,11 @@ export default function PersistentDrawerLeft() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ top: "104px" }}>
+      <AppBar
+        position="fixed"
+        open={open}
+        sx={{ backgroundColor: "#222222", top: "104px" }}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -170,19 +176,25 @@ export default function PersistentDrawerLeft() {
             </ListItem>
           ))}
         </List>
-        <Divider />
-        <List>
-          {adminDashboard.map((list) => (
-            <ListItem key={list.name} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <list.icon />
-                </ListItemIcon>
-                <ListItemText primary={list.name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {session.role === "admin" ? (
+          <>
+            <Divider />
+            <List>
+              {adminDashboard.map((list) => (
+                <ListItem key={list.name} disablePadding>
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <list.icon />
+                    </ListItemIcon>
+                    <ListItemText primary={list.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        ) : (
+          <></>
+        )}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
