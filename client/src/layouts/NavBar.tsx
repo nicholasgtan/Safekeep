@@ -6,13 +6,16 @@ import Button from "@mui/material/Button";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import AuthAPI from "../utils/AuthAPI";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const { session, setSession } = useContext(AuthAPI);
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -33,6 +36,7 @@ const NavBar = () => {
           msg: "",
         });
         setStatus("You are now logged out.");
+        navigate("/");
       }
     } catch (error) {
       setLoading(false);
@@ -50,39 +54,48 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar color="secondary" sx={{ display: "flex", flexDirection: "column" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography variant="h6" sx={{ fontSize: 24 }}>
-          Safekeep💰
-        </Typography>
-        <div style={{ display: "flex", gap: "0.2rem" }}>
-          {session.authenticated === false ? (
-            <Login
-              setStatus={setStatus}
-              loading={loading}
-              setLoading={setLoading}
-            />
-          ) : (
-            <Button
-              variant="contained"
-              onClick={handleLogout}
-              disabled={loading}
-            >
-              {loading ? <>Loading...</> : <>Logout</>}
-            </Button>
-          )}
-        </div>
-      </Toolbar>
-      <Box
-        sx={{
-          textAlign: "end",
-          marginTop: "0.5rem",
-          marginRight: "0.5rem",
-          height: "2rem",
-        }}
-      >
-        {status}
-      </Box>
+    <AppBar
+      color="secondary"
+      position="sticky"
+      sx={{ display: "flex", flexDirection: "column" }}
+    >
+      <Paper>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h3" sx={{ mt: 1 }}>
+            Safekeep
+          </Typography>
+          <div style={{ display: "flex", gap: "0.2rem" }}>
+            {session.authenticated === false ? (
+              <Login
+                setStatus={setStatus}
+                loading={loading}
+                setLoading={setLoading}
+              />
+            ) : (
+              <Button
+                variant="contained"
+                onClick={handleLogout}
+                disabled={loading}
+                sx={{ height: "36px" }}
+              >
+                {loading ? <>Loading...</> : <>Logout</>}
+              </Button>
+            )}
+          </div>
+        </Toolbar>
+        <Box
+          sx={{
+            backgroundColor: "#121212",
+            textAlign: "end",
+            marginTop: "0.5rem",
+            height: "2rem",
+          }}
+        >
+          <Typography variant="body2" sx={{ color: "#fff" }}>
+            {status}
+          </Typography>
+        </Box>
+      </Paper>
     </AppBar>
   );
 };

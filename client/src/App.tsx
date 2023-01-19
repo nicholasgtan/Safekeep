@@ -3,6 +3,7 @@ import { useState } from "react";
 import Layout from "./layouts/Layout";
 import AuthAPI from "./utils/AuthAPI";
 import Home from "./pages/Home";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   interface SessionData {
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>

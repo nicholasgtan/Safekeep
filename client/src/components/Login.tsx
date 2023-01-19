@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useContext } from "react";
 import AuthAPI from "../utils/AuthAPI";
+import { useNavigate } from "react-router-dom";
 
 interface NavStatusProps {
   setStatus: Dispatch<SetStateAction<string>>;
@@ -30,6 +31,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
   }
 
   const { setSession } = useContext(AuthAPI);
+  const navigate = useNavigate();
 
   const handleLogin = async (values: LoginFormValues) => {
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -56,6 +58,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
               loginStatus +
               "."
           );
+          navigate("/admin");
         } else {
           setStatus(
             "Welcome " +
@@ -113,7 +116,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
               variant="contained"
               disabled={isSubmitting}
               type="submit"
-              sx={{ height: "100%" }}
+              sx={{ height: "36px" }}
             >
               {loading ? <>Loading...</> : <>Log In</>}
             </Button>

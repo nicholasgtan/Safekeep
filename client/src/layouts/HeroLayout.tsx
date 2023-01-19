@@ -3,13 +3,16 @@ import PropTypes from "prop-types";
 import styled from "@mui/material/styles/styled";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
 
 const ProductHeroLayoutRoot = styled("section")(({ theme }) => ({
   color: theme.palette.common.white,
   position: "relative",
   display: "flex",
   alignItems: "center",
-  height: "90vh",
+  height: "80vh",
   [theme.breakpoints.up("sm")]: {
     minHeight: 500,
     maxHeight: 1300,
@@ -37,6 +40,24 @@ function ProductHeroLayout(props: HeroProps) {
 
   return (
     <ProductHeroLayoutRoot>
+      <Card raised={true} sx={{ maxWidth: "23rem", ml: 9 }}>
+        <CardContent sx={{ backgroundColor: "#121212" }}>
+          <Typography variant="h3" sx={{ color: "#fff" }}>
+            Global Custody Services
+          </Typography>
+          <br />
+          <Typography variant="h6" sx={{ color: "#fff" }}>
+            Safekeeping your assets and market operations with precision and
+            reliability.
+          </Typography>
+          <br />
+          <Typography variant="body2" sx={{ color: "#fff" }}>
+            We bring innovative, scalable and automated solutions to our
+            clients, with a laser focus on reliability, stability and
+            accountability.
+          </Typography>
+        </CardContent>
+      </Card>
       <Container
         sx={{
           mt: 3,

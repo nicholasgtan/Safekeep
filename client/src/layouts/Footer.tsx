@@ -23,7 +23,6 @@ export default function AppFooter() {
       elevation={4}
       sx={{
         bgcolor: "secondary.main",
-        height: "10vh",
         display: "flex",
         justifyContent: "space-between",
       }}
