@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "prebuild": "npx prisma generate --schema=./server/prisma/schema.prisma",
+    "install": "npx prisma generate --schema=./server/prisma/schema.prisma",
+    "prebuild": "npm prune",
     "build": "cd server && npm run build",
     "postbuild": "cd client && npm run build",
     "start": "cd server && npm run start"
