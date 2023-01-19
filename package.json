@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "install": "npx prisma generate --schema=./server/prisma/schema.prisma",
-    "prebuild": "npm prune",
+    "prebuild": "rm -rf node_modules/.cache/",
     "build": "cd server && npm run build",
     "postbuild": "cd client && npm run build",
     "start": "cd server && npm run start"
