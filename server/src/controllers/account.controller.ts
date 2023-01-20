@@ -109,6 +109,38 @@ accountRouter.put(
   }
 );
 
+//* Update CashBalance only.
+accountRouter.put(
+  "/cash/:id",
+  body("cashBalance").isInt({ min: 0 }).optional({ checkFalsy: true }),
+  async (request: Request, response: Response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
+    const id: string = request.params.id;
+    try {
+      const account = request.body;
+      const updatedAccount = await AccountService.updateDepositCashBalance(
+        account,
+        id
+      );
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            updatedAccount,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //* DELETE: Delete a Trade by id
 accountRouter.delete("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;

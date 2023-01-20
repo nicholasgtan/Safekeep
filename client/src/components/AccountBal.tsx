@@ -8,7 +8,7 @@ import { CircularProgress } from "@mui/material";
 import formatCurrency from "../utils/formatCurrency";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import { Form, Formik } from "formik";
+import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
 import { cashDepoSchema } from "./Formik/yup.schema";
@@ -18,6 +18,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const AccountBal = () => {
   const { session } = useContext(AuthAPI);
   const { loading, setLoading } = useContext(LoadingAPI);
+  const [render, setRender] = useState(1);
+  const [successD, setSuccessD] = useState("");
+  const [successW, setSuccessW] = useState("");
   const [accountDetails, setAccountDetails] = useState<AccountData>({
     email: "",
     firstName: "",
@@ -31,6 +34,7 @@ const AccountBal = () => {
         lastName: "",
       },
       account: {
+        id: "",
         cashBalance: 0,
         equityBalance: 0,
         fixedIncomeBal: 0,
@@ -51,6 +55,7 @@ const AccountBal = () => {
         lastName: string;
       };
       account: {
+        id: string;
         cashBalance: number;
         equityBalance: number;
         fixedIncomeBal: number;
@@ -73,6 +78,7 @@ const AccountBal = () => {
           setLoading(false);
           if (data.userClient.accountRep.id !== session.currentUserId) {
             setAccountDetails(data);
+            render + 1;
           }
           return data;
         }
@@ -90,7 +96,7 @@ const AccountBal = () => {
       }
     };
     fetchAccount();
-  }, [session.currentUserId, setLoading]);
+  }, [session.currentUserId, setLoading, render]);
 
   const { cashBalance, equityBalance, fixedIncomeBal } =
     accountDetails.userClient.account;
@@ -123,12 +129,96 @@ const AccountBal = () => {
     ],
   };
 
-  const handleDeposit = () => {
-    console.log("adding money");
+  interface CashDepo extends FormikValues {
+    cashBalance: number;
+  }
+
+  const handleDeposit = async (
+    values: CashDepo,
+    actions: FormikHelpers<CashDepo>
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const newCashBalance =
+      Number(accountDetails.userClient.account.cashBalance) +
+      Number(values.cashBalance);
+    try {
+      const { data } = await axios.put(
+        `/api/accounts/cash/${accountDetails.userClient.account.id}`,
+        {
+          cashBalance: newCashBalance,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (!data) {
+        throw new Error("Network Error");
+      }
+      if (data !== null) {
+        setAccountDetails({ ...accountDetails, ...data });
+        setSuccessD("Transaction successful");
+        setRender(render + 1);
+        actions.resetForm();
+      }
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error message: ", error.response?.data.msg);
+        // setStatus(error.response?.data.msg);
+        // 👇️ error: AxiosError<any, any>
+        return error.message;
+      } else {
+        // console.log("unexpected error: ", error);
+        return "An unexpected error occurred";
+      }
+    }
   };
 
-  const handleWithdraw = () => {
-    console.log("taking money");
+  const handleWithdraw = async (
+    values: CashDepo,
+    actions: FormikHelpers<CashDepo>
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const newCashBalance =
+      Number(accountDetails.userClient.account.cashBalance) -
+      Number(values.cashBalance);
+    try {
+      const { data } = await axios.put(
+        `/api/accounts/cash/${accountDetails.userClient.account.id}`,
+        {
+          cashBalance: newCashBalance,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (!data) {
+        throw new Error("Network Error");
+      }
+      if (data !== null) {
+        setAccountDetails({ ...accountDetails, ...data });
+        setSuccessW("Transaction successful");
+        setRender(render - 1);
+        actions.resetForm();
+      }
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error message: ", error.response?.data.msg);
+        // setStatus(error.response?.data.msg);
+        // 👇️ error: AxiosError<any, any>
+        return error.message;
+      } else {
+        // console.log("unexpected error: ", error);
+        return "An unexpected error occurred";
+      }
+    }
   };
 
   return (
@@ -207,62 +297,74 @@ const AccountBal = () => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h4">Deposit Cash</Typography>
-        <br />
-        <Formik
-          initialValues={{ cashBalance: "" }}
-          validationSchema={cashDepoSchema}
-          onSubmit={handleDeposit}
-        >
-          {({ isSubmitting }) => (
-            <Form autoComplete="off" style={{ display: "flex", gap: "0.2rem" }}>
-              <CustomInput
-                label="Cash"
-                name="cashBalance"
-                type="number"
-                InputProps={{ inputProps: { min: 1 } }}
-              />
-              <br />
-              <Button
-                variant="contained"
-                disabled={isSubmitting}
-                type="submit"
-                sx={{ height: "36px", width: "110px" }}
+        <Box height="106.55px">
+          <Typography variant="h5">Deposit Cash</Typography>
+          <br />
+          <Formik
+            initialValues={{ cashBalance: 0 }}
+            validationSchema={cashDepoSchema}
+            onSubmit={handleDeposit}
+          >
+            {({ isSubmitting }) => (
+              <Form
+                autoComplete="off"
+                style={{ display: "flex", gap: "0.2rem" }}
               >
-                Deposit
-              </Button>
-            </Form>
-          )}
-        </Formik>
+                <CustomInput
+                  label="Cash"
+                  name="cashBalance"
+                  type="number"
+                  InputProps={{ inputProps: { min: 1 } }}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  disabled={isSubmitting}
+                  type="submit"
+                  sx={{ height: "36px", width: "110px" }}
+                >
+                  Deposit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+          <Typography variant="body2">{successD}</Typography>
+        </Box>
         <br />
         <br />
-        <Typography variant="h4">Withdraw Cash</Typography>
-        <br />
-        <Formik
-          initialValues={{ cashBalance: "" }}
-          validationSchema={cashDepoSchema}
-          onSubmit={handleWithdraw}
-        >
-          {({ isSubmitting }) => (
-            <Form autoComplete="off" style={{ display: "flex", gap: "0.2rem" }}>
-              <CustomInput
-                label="Cash"
-                name="cashBalance"
-                type="number"
-                InputProps={{ inputProps: { min: 1 } }}
-              />
-              <br />
-              <Button
-                variant="contained"
-                disabled={isSubmitting}
-                type="submit"
-                sx={{ height: "36px", width: "110px" }}
+        <Box height="106.55px">
+          <Typography variant="h5">Withdraw Cash</Typography>
+          <br />
+          <Formik
+            initialValues={{ cashBalance: 0 }}
+            validationSchema={cashDepoSchema}
+            onSubmit={handleWithdraw}
+          >
+            {({ isSubmitting }) => (
+              <Form
+                autoComplete="off"
+                style={{ display: "flex", gap: "0.2rem" }}
               >
-                Withdraw
-              </Button>
-            </Form>
-          )}
-        </Formik>
+                <CustomInput
+                  label="Cash"
+                  name="cashBalance"
+                  type="number"
+                  InputProps={{ inputProps: { min: 1 } }}
+                />
+                <br />
+                <Button
+                  variant="contained"
+                  disabled={isSubmitting}
+                  type="submit"
+                  sx={{ height: "36px", width: "110px" }}
+                >
+                  Withdraw
+                </Button>
+              </Form>
+            )}
+          </Formik>
+          <Typography variant="body2">{successW}</Typography>
+        </Box>
       </Box>
     </Box>
   );

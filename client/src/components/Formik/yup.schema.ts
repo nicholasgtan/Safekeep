@@ -6,5 +6,5 @@ export const loginSchema = yup.object().shape({
 });
 
 export const cashDepoSchema = yup.object().shape({
-  cashBalance: yup.number().min(0),
+  cashBalance: yup.number().min(1, "Amount cannot be 0."),
 });

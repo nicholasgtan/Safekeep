@@ -92,7 +92,7 @@ const NavBar = () => {
                 disabled={loading}
                 sx={{ height: "36px" }}
               >
-                {loading ? <>Loading...</> : <>Logout</>}
+                Logout
               </Button>
             )}
           </div>

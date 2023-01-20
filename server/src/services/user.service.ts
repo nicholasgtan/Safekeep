@@ -210,6 +210,7 @@ const clientAccountBal = Prisma.validator<Prisma.UserArgs>()({
         },
         account: {
           select: {
+            id: true,
             cashBalance: true,
             equityBalance: true,
             fixedIncomeBal: true,
@@ -246,6 +247,7 @@ export const ClientGetAccountBalanceById = async (
           },
           account: {
             select: {
+              id: true,
               cashBalance: true,
               equityBalance: true,
               fixedIncomeBal: true,

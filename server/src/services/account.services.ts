@@ -62,6 +62,26 @@ export const updateAccount = async (
   });
 };
 
+//* Update CashBalance only
+export const updateDepositCashBalance = async (
+  account: Omit<Account, "id">,
+  id: string
+): Promise<Account> => {
+  const { cashBalance } = account;
+  return prisma.account.update({
+    where: {
+      id,
+    },
+    data: {
+      cashBalance,
+    },
+    include: {
+      client: true,
+      trade: true,
+    },
+  });
+};
+
 export const deleteAccount = async (id: string): Promise<void> => {
   await prisma.account.delete({
     where: {
