@@ -6,4 +6,9 @@ export interface CustomFieldProps {
   placeholder?: string;
   value?: string;
   style?: React.CSSProperties;
+  InputProps?: {
+    inputProps: {
+      min: number;
+    };
+  };
 }
