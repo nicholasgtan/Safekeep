@@ -202,6 +202,7 @@ const clientAccountBal = Prisma.validator<Prisma.UserArgs>()({
         name: true,
         accountRep: {
           select: {
+            id: true,
             email: true,
             firstName: true,
             lastName: true,
@@ -237,6 +238,7 @@ export const ClientGetAccountBalanceById = async (
           name: true,
           accountRep: {
             select: {
+              id: true,
               email: true,
               firstName: true,
               lastName: true,

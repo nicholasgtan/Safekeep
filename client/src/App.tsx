@@ -3,10 +3,13 @@ import { useState } from "react";
 import Layout from "./layouts/Layout";
 import AuthAPI from "./utils/AuthAPI";
 import Home from "./pages/Home";
-import AdminDashboard from "./pages/AdminDashboard";
-import ClientDashboard from "./pages/ClientDashboard";
+import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./utils/PrivateRoutes";
 import AccountBal from "./components/AccountBal";
+import DashboardSummary from "./components/DashboardSummary";
+import Trades from "./components/Trades";
+import Clients from "./components/Clients";
+import Access from "./components/Access";
 
 function App() {
   interface SessionData {
@@ -35,9 +38,13 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route element={<PrivateRoute />}>
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/client" element={<ClientDashboard />} />
-              <Route path="/account" element={<AccountBal />} />
+              <Route path="/dashboard" element={<Dashboard />}>
+                <Route path="/dashboard" element={<DashboardSummary />} />
+                <Route path="/dashboard/account" element={<AccountBal />} />
+                <Route path="/dashboard/trades" element={<Trades />} />
+                <Route path="/dashboard/clients" element={<Clients />} />
+                <Route path="/dashboard/access" element={<Access />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

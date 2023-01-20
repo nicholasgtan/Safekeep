@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import AuthAPI from "../utils/AuthAPI";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
+import LoadingAPI from "../utils/LoadingAPI";
 
 const AccountBal = () => {
   const { session } = useContext(AuthAPI);
+  const { loading, setLoading } = useContext(LoadingAPI);
   const [accountDetails, setAccountDetails] = useState<AccountData>({
     email: "",
     firstName: "",
@@ -12,6 +14,7 @@ const AccountBal = () => {
     userClient: {
       name: "",
       accountRep: {
+        id: "",
         email: "",
         firstName: "",
         lastName: "",
@@ -31,6 +34,7 @@ const AccountBal = () => {
     userClient: {
       name: string;
       accountRep: {
+        id: string;
         email: string;
         firstName: string;
         lastName: string;
@@ -45,20 +49,24 @@ const AccountBal = () => {
 
   useEffect(() => {
     const fetchAccount = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
       try {
-        const response = await axios.get<AccountData>(
-          `/api/user/account/${session.currentUserId}`
+        setLoading(true);
+        const { data } = await axios.get<AccountData>(
+          `/api/users/account/${session.currentUserId}`
         );
-        if (!response) {
+        if (!data) {
+          setLoading(false);
           throw new Error("Network Error");
         }
-        if (response !== null) {
-          //   setAccountDetails(response);
-          console.log(response);
-          return response;
+        if (data !== null) {
+          setLoading(false);
+          if (data.userClient.accountRep.id !== session.currentUserId) {
+            setAccountDetails(data);
+          }
+          return data;
         }
       } catch (error) {
+        setLoading(false);
         if (axios.isAxiosError(error)) {
           console.log("error message: ", error.response?.data.msg);
           // setStatus(error.response?.data.msg);
@@ -71,18 +79,25 @@ const AccountBal = () => {
       }
     };
     fetchAccount();
-  }, [accountDetails, session.currentUserId]);
+  }, [session.currentUserId, setLoading]);
 
   return (
     <div>
       <Typography>
-        Cash Balance: {accountDetails.userClient.account.cashBalance}
+        Cash Balance:{" "}
+        {loading ? "Loading..." : accountDetails.userClient.account.cashBalance}
       </Typography>
       <Typography>
-        Equity Balance: {accountDetails.userClient.account.equityBalance}
+        Equity Balance:{" "}
+        {loading
+          ? "Loading..."
+          : accountDetails.userClient.account.equityBalance}
       </Typography>
       <Typography>
-        FixedIncome Balance: {accountDetails.userClient.account.fixedIncomeBal}
+        FixedIncome Balance:{" "}
+        {loading
+          ? "Loading..."
+          : accountDetails.userClient.account.fixedIncomeBal}
       </Typography>
     </div>
   );

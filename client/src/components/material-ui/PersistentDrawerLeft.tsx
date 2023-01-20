@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -22,9 +21,9 @@ import WaterfallChartIcon from "@mui/icons-material/WaterfallChart";
 import PeopleIcon from "@mui/icons-material/People";
 import KeyIcon from "@mui/icons-material/Key";
 import AuthAPI from "../../utils/AuthAPI";
-import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import Link from "@mui/material/Link";
+import React, { useState, useContext } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import LoadingAPI from "../../utils/LoadingAPI";
 
 const drawerWidth = 255;
 
@@ -79,8 +78,10 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("Dashboard");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const { session } = useContext(AuthAPI);
 
   const handleDrawerOpen = () => {
@@ -91,8 +92,13 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   };
 
+  const handleTitle = (event: React.MouseEvent) => {
+    const title = (event.target as HTMLElement).innerHTML;
+    setTitle(title);
+  };
+
   const standardDashboard = [
-    { name: "Dashboard", icon: DashboardIcon, navi: "dashboard" },
+    { name: "Dashboard", icon: DashboardIcon, navi: "" },
     {
       name: "Account Balance",
       icon: AccountBalanceIcon,
@@ -101,7 +107,7 @@ export default function PersistentDrawerLeft() {
     {
       name: "Trades",
       icon: WaterfallChartIcon,
-      navi: "trade",
+      navi: "trades",
     },
   ];
 
@@ -138,7 +144,7 @@ export default function PersistentDrawerLeft() {
             component="div"
             sx={{ color: "#FFF" }}
           >
-            Persistent drawer
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -172,7 +178,7 @@ export default function PersistentDrawerLeft() {
         <List>
           {standardDashboard.map((list) => (
             <NavLink
-              to={`/${list.navi}`}
+              to={`/dashboard/${list.navi}`}
               style={{ textDecoration: "none", color: "inherit" }}
               key={list.navi}
             >
@@ -181,7 +187,7 @@ export default function PersistentDrawerLeft() {
                   <ListItemIcon>
                     <list.icon />
                   </ListItemIcon>
-                  <ListItemText primary={list.name} />
+                  <ListItemText primary={list.name} onClick={handleTitle} />
                 </ListItemButton>
               </ListItem>
             </NavLink>
@@ -192,14 +198,20 @@ export default function PersistentDrawerLeft() {
             <Divider />
             <List>
               {adminDashboard.map((list) => (
-                <ListItem key={list.navi} disablePadding>
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <list.icon />
-                    </ListItemIcon>
-                    <ListItemText primary={list.name} />
-                  </ListItemButton>
-                </ListItem>
+                <NavLink
+                  to={`/dashboard/${list.navi}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  key={list.navi}
+                >
+                  <ListItem key={list.navi} disablePadding>
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <list.icon />
+                      </ListItemIcon>
+                      <ListItemText primary={list.name} />
+                    </ListItemButton>
+                  </ListItem>
+                </NavLink>
               ))}
             </List>
           </>
@@ -209,35 +221,9 @@ export default function PersistentDrawerLeft() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
-          dolor purus non enim praesent elementum facilisis leo vel. Risus at
-          ultrices mi tempus imperdiet. Semper risus in hendrerit gravida rutrum
-          quisque non tellus. Convallis convallis tellus id interdum velit
-          laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed
-          adipiscing. Amet nisl suscipit adipiscing bibendum est ultricies
-          integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate
-          eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo
-          quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat
-          vivamus at augue. At augue eget arcu dictum varius duis at consectetur
-          lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa sapien
-          faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est
-          ullamcorper eget nulla facilisi etiam dignissim diam. Pulvinar
-          elementum integer enim neque volutpat ac tincidunt. Ornare suspendisse
-          sed nisi lacus sed viverra tellus. Purus sit amet volutpat consequat
-          mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis
-          risus sed vulputate odio. Morbi tincidunt ornare massa eget egestas
-          purus viverra accumsan in. In hendrerit gravida rutrum quisque non
-          tellus orci ac. Pellentesque nec nam aliquam sem et tortor. Habitant
-          morbi tristique senectus et. Adipiscing elit duis tristique
-          sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <LoadingAPI.Provider value={{ loading, setLoading }}>
+          <Outlet />
+        </LoadingAPI.Provider>
       </Main>
     </Box>
   );

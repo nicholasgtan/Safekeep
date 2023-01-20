@@ -58,7 +58,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
               loginStatus +
               "."
           );
-          navigate("/admin");
+          navigate("/dashboard");
         } else {
           setStatus(
             "Welcome " +
@@ -67,7 +67,7 @@ const Login = ({ setStatus, loading, setLoading }: NavStatusProps) => {
               loginStatus +
               "."
           );
-          navigate("/client");
+          navigate("/dashboard");
         }
       }
       return data;

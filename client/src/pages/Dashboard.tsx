@@ -1,6 +1,6 @@
 import PersistentDrawerLeft from "../components/material-ui/PersistentDrawerLeft";
 
-const ClientDashboard = () => {
+const Dashboard = () => {
   return (
     <div>
       <PersistentDrawerLeft />
@@ -8,4 +8,4 @@ const ClientDashboard = () => {
   );
 };
 
-export default ClientDashboard;
+export default Dashboard;
