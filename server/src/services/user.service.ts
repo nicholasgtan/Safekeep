@@ -259,6 +259,46 @@ export const ClientGetAccountBalanceById = async (
   });
 };
 
+//* Client access trades by User id:
+const userGetClientTrades = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    userClient: {
+      select: {
+        name: true,
+        account: {
+          select: {
+            trade: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+type UserGetClientTrades = Prisma.UserGetPayload<typeof userGetClientTrades>;
+
+export const UserGetClientTradesById = async (
+  id: string
+): Promise<UserGetClientTrades | null> => {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      userClient: {
+        select: {
+          name: true,
+          account: {
+            select: {
+              trade: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 export const clientUpdateUser = async (
   user: Omit<ClientUserAccess, "id">,
   id: string

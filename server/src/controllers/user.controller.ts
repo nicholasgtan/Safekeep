@@ -30,7 +30,7 @@ userRouter.get("/:id", async (request: Request, response: Response) => {
   }
 });
 
-//* GET: Client get Account details by User Id
+//* GET: User Client get Account details by Id
 userRouter.get("/account/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;
   try {
@@ -48,6 +48,29 @@ userRouter.get("/account/:id", async (request: Request, response: Response) => {
       return response.status(200).json(bigIntSerialized());
     }
     return response.status(404).json({ msg: "Account not found" });
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
+  }
+});
+
+//* GET: User Client get Trades by Id
+userRouter.get("/trades/:id", async (request: Request, response: Response) => {
+  const id: string = request.params.id;
+  try {
+    const account = await UserService.UserGetClientTradesById(id);
+    if (account) {
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            account,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
+    }
+    return response.status(404).json({ msg: "Trades not found" });
   } catch (error: unknown) {
     return response.status(500).json({ error });
   }
