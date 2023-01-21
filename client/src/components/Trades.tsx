@@ -1,15 +1,14 @@
-import { useContext, useState } from "react";
-import AuthAPI from "../utils/AuthAPI";
+import { useState } from "react";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
-import LoadingAPI from "../utils/LoadingAPI";
 import Box from "@mui/material/Box/Box";
-import { CircularProgress } from "@mui/material";
-import { Form, Formik, FormikHelpers, FormikValues } from "formik";
+import { Form, Formik, FormikHelpers } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
-import { cashDepoSchema } from "./Formik/yup.schema";
+import { tradeInputSchema } from "./Formik/yup.schema";
 import TradeTable from "./TradeTable";
+import CustomSelect from "./Formik/CustomSelect";
+import MenuItem from "@mui/material/MenuItem";
 
 export interface TradeProps {
   tradeDate: string;
@@ -17,204 +16,147 @@ export interface TradeProps {
   position: string;
   stockType: string;
   settlementAmt: number;
-  id: string;
+  id?: string;
 }
 
 export interface TradeData {
   userClient: {
     name: string;
     account: {
+      id: string;
       trade: TradeProps[];
     };
   };
 }
 
 const Trades = () => {
-  const { session } = useContext(AuthAPI);
-  const { loading, setLoading } = useContext(LoadingAPI);
   const [render, setRender] = useState(1);
-  const [successD, setSuccessD] = useState("");
-  const [successW, setSuccessW] = useState("");
+  const [success, setSuccess] = useState("");
+  const [accountId, setAccountId] = useState("");
 
-  // useEffect(() => {
-  //   const fetchAccount = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const { data } = await axios.get<TradeData>(
-  //         `/api/users/account/${session.currentUserId}`
-  //       );
-  //       if (!data) {
-  //         setLoading(false);
-  //         throw new Error("Network Error");
-  //       }
-  //       if (data !== null) {
-  //         setLoading(false);
-  //         if (data.userClient.accountRep.id !== session.currentUserId) {
-  //           setAccountDetails(data);
-  //           render + 1;
-  //         }
-  //         return data;
-  //       }
-  //     } catch (error) {
-  //       setLoading(false);
-  //       if (axios.isAxiosError(error)) {
-  //         console.log("error message: ", error.response?.data.msg);
-  //         // setStatus(error.response?.data.msg);
-  //         // 👇️ error: AxiosError<any, any>
-  //         return error.message;
-  //       } else {
-  //         // console.log("unexpected error: ", error);
-  //         return "An unexpected error occurred";
-  //       }
-  //     }
-  //   };
-  //   fetchAccount();
-  // }, [session.currentUserId, setLoading, render]);
-
-  // interface CashDepo extends FormikValues {
-  //   cashBalance: number;
-  // }
-
-  // const handleDeposit = async (
-  //   values: CashDepo,
-  //   actions: FormikHelpers<CashDepo>
-  // ) => {
-  //   await new Promise((resolve) => setTimeout(resolve, 500));
-  //   const newCashBalance =
-  //     Number(accountDetails.userClient.account.cashBalance) +
-  //     Number(values.cashBalance);
-  //   try {
-  //     const { data } = await axios.put(
-  //       `/api/accounts/cash/${accountDetails.userClient.account.id}`,
-  //       {
-  //         cashBalance: newCashBalance,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (!data) {
-  //       throw new Error("Network Error");
-  //     }
-  //     if (data !== null) {
-  //       setAccountDetails({ ...accountDetails, ...data });
-  //       setSuccessD("Transaction successful");
-  //       setRender(render + 1);
-  //       actions.resetForm();
-  //     }
-  //     return data;
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log("error message: ", error.response?.data.msg);
-  //       // setStatus(error.response?.data.msg);
-  //       // 👇️ error: AxiosError<any, any>
-  //       return error.message;
-  //     } else {
-  //       // console.log("unexpected error: ", error);
-  //       return "An unexpected error occurred";
-  //     }
-  //   }
-  // };
-
-  // const handleWithdraw = async (
-  //   values: CashDepo,
-  //   actions: FormikHelpers<CashDepo>
-  // ) => {
-  //   await new Promise((resolve) => setTimeout(resolve, 500));
-  //   const newCashBalance =
-  //     Number(accountDetails.userClient.account.cashBalance) -
-  //     Number(values.cashBalance);
-  //   try {
-  //     const { data } = await axios.put(
-  //       `/api/accounts/cash/${accountDetails.userClient.account.id}`,
-  //       {
-  //         cashBalance: newCashBalance,
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //         },
-  //       }
-  //     );
-  //     if (!data) {
-  //       throw new Error("Network Error");
-  //     }
-  //     if (data !== null) {
-  //       setAccountDetails({ ...accountDetails, ...data });
-  //       setSuccessW("Transaction successful");
-  //       setRender(render - 1);
-  //       actions.resetForm();
-  //     }
-  //     return data;
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.log("error message: ", error.response?.data.msg);
-  //       // setStatus(error.response?.data.msg);
-  //       // 👇️ error: AxiosError<any, any>
-  //       return error.message;
-  //     } else {
-  //       // console.log("unexpected error: ", error);
-  //       return "An unexpected error occurred";
-  //     }
-  //   }
-  // };
+  const handleTradeInput = async (
+    values: TradeProps,
+    actions: FormikHelpers<TradeProps>
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const { tradeDate, settlementDate, stockType, position, settlementAmt } =
+        values;
+      const tDate = new Date(tradeDate);
+      const formatTradeDate = tDate.toISOString();
+      const sDate = new Date(settlementDate);
+      const formatSettlementData = sDate.toISOString();
+      const { data } = await axios.post(
+        "/api/trades",
+        {
+          tradeDate: formatTradeDate,
+          settlementDate: formatSettlementData,
+          stockType,
+          position,
+          settlementAmt,
+          custodyAccountId: accountId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }
+      );
+      if (!data) {
+        throw new Error("Network Error");
+      }
+      if (data !== null) {
+        setSuccess("Trade input successful");
+        setRender(render + 1);
+        actions.resetForm();
+      }
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.log("error message: ", error.response?.data.msg);
+        // setStatus(error.response?.data.msg);
+        // 👇️ error: AxiosError<any, any>
+        return error.message;
+      } else {
+        // console.log("unexpected error: ", error);
+        return "An unexpected error occurred";
+      }
+    }
+  };
 
   return (
     <Box sx={{ display: "flex", height: "68vh", gap: "2rem" }}>
       <Box
         sx={{
           width: "70%",
-          // border: "solid 1px #121212",
           display: "flex",
           justifyContent: "center",
         }}
       >
-        {/* {loading ? (
-          <Box sx={{ alignSelf: "center" }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <Box sx={{ width: "90%" }}>
-            <Typography variant="h3">Company Name</Typography>
-            <br />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}> */}
-        <TradeTable />
-        {/* </Box>
-          </Box>
-        )} */}
+        <TradeTable setAccountId={setAccountId} render={render} />
       </Box>
       <Box
         sx={{
           width: "30%",
-          // border: "solid 1px #121212",
-          // display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        {" "}
-        <Box height="106.55px">
+        <Box>
           <Typography variant="h5">Trade Input</Typography>
           <br />
           <Formik
-            initialValues={{ cashBalance: 0 }}
-            validationSchema={cashDepoSchema}
-            onSubmit={() => {
-              console.log("submit");
+            initialValues={{
+              tradeDate: "",
+              settlementDate: "",
+              stockType: "",
+              position: "",
+              settlementAmt: 0,
             }}
+            validationSchema={tradeInputSchema}
+            onSubmit={handleTradeInput}
           >
             {({ isSubmitting }) => (
               <Form
                 autoComplete="off"
-                style={{ display: "flex", gap: "0.2rem" }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "60%",
+                  height: "60vh",
+                }}
               >
+                <Typography sx={{ mb: 1 }}>Trade Date:</Typography>
                 <CustomInput
-                  label="Cash"
-                  name="cashBalance"
+                  name="tradeDate"
+                  type="date"
+                  placeholder="Trade date"
+                />
+                <br />
+                <Typography sx={{ mb: 1 }}>Settlement Date:</Typography>
+                <CustomInput
+                  name="settlementDate"
+                  type="date"
+                  placeholder="Settlement date"
+                />
+                <br />
+                <Typography sx={{ mb: 1 }}>Equity/Fixed Income:</Typography>
+                <CustomSelect label="Select" select={true} name="stockType">
+                  <MenuItem value="equity">Equity</MenuItem>
+                  <MenuItem value="fixedIncome">Fixed Income</MenuItem>
+                </CustomSelect>
+                <br />
+                <Typography sx={{ mb: 1 }}>Buy/Sell:</Typography>
+                <CustomSelect label="Select" select={true} name="position">
+                  <MenuItem value="buy">Buy</MenuItem>
+                  <MenuItem value="sell">Sell</MenuItem>
+                </CustomSelect>
+                <br />
+                <Typography sx={{ mb: 1 }}>Settlement Amount:</Typography>
+                <CustomInput
+                  label="Nominal"
+                  name="settlementAmt"
                   type="number"
                   InputProps={{ inputProps: { min: 1 } }}
                 />
@@ -225,12 +167,14 @@ const Trades = () => {
                   type="submit"
                   sx={{ height: "36px", width: "110px" }}
                 >
-                  Deposit
+                  Submit
                 </Button>
+                <Typography variant="body2" sx={{ mt: 1 }}>
+                  {success}
+                </Typography>
               </Form>
             )}
           </Formik>
-          <Typography variant="body2">{successD}</Typography>
         </Box>
       </Box>
     </Box>

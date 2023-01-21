@@ -1,8 +1,8 @@
 import { useField } from "formik";
-import type { CustomFieldProps } from "./CustomFieldProps";
+import type { CustomSelectProps } from "./CustomFieldProps";
 import TextField from "@mui/material/TextField";
 
-const CustomSelect = ({ ...props }: CustomFieldProps) => {
+const CustomSelect = ({ ...props }: CustomSelectProps) => {
   const [field, meta] = useField(props);
   return (
     <>

@@ -1,4 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import formatDate from "../utils/formatDate";
@@ -19,7 +25,12 @@ const columns: GridColDef[] = [
   { field: "id", headerName: "Trade ID", minWidth: 250, flex: 1 },
 ];
 
-export default function TradeTable() {
+interface TradesPageProps {
+  setAccountId: Dispatch<SetStateAction<string>>;
+  render: number;
+}
+
+export default function TradeTable({ setAccountId, render }: TradesPageProps) {
   const [clientName, setClientName] = useState("");
   const [database, setDatabase] = useState<TradeProps[]>([]);
   const { session } = useContext(AuthAPI);
@@ -37,13 +48,11 @@ export default function TradeTable() {
           throw new Error("Network Error");
         }
         if (data !== null) {
-          setLoading(false);
+          setAccountId(data.userClient.account.id);
           setClientName(data.userClient.name);
           const { trade } = data.userClient.account;
-          // if (data.userClient.accountRep.id !== session.currentUserId) {\
           setDatabase(trade);
-          //   render + 1;
-          // }
+          setLoading(false);
           return trade;
         }
       } catch (error) {
@@ -60,7 +69,7 @@ export default function TradeTable() {
       }
     };
     fetchData();
-  }, [session.currentUserId, setLoading]);
+  }, [session.currentUserId, setLoading, setAccountId, render]);
 
   const rows = () => {
     const mapDatabase = database.map((trade) => {
@@ -100,11 +109,12 @@ export default function TradeTable() {
             <DataGrid
               rows={rows()}
               columns={columns}
-              pageSize={5}
-              rowsPerPageOptions={[5]}
+              // pageSize={5}
+              // rowsPerPageOptions={[5]}
               checkboxSelection
               disableSelectionOnClick
               experimentalFeatures={{ newEditingApi: true }}
+              autoPageSize={true}
             />
           </Box>
         </Box>

@@ -11,7 +11,7 @@ import { Pie } from "react-chartjs-2";
 import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
-import { cashDepoSchema } from "./Formik/yup.schema";
+import { cashBalSchema } from "./Formik/yup.schema";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -78,7 +78,6 @@ const AccountBal = () => {
           setLoading(false);
           if (data.userClient.accountRep.id !== session.currentUserId) {
             setAccountDetails(data);
-            render + 1;
           }
           return data;
         }
@@ -302,7 +301,7 @@ const AccountBal = () => {
           <br />
           <Formik
             initialValues={{ cashBalance: 0 }}
-            validationSchema={cashDepoSchema}
+            validationSchema={cashBalSchema}
             onSubmit={handleDeposit}
           >
             {({ isSubmitting }) => (
@@ -337,7 +336,7 @@ const AccountBal = () => {
           <br />
           <Formik
             initialValues={{ cashBalance: 0 }}
-            validationSchema={cashDepoSchema}
+            validationSchema={cashBalSchema}
             onSubmit={handleWithdraw}
           >
             {({ isSubmitting }) => (

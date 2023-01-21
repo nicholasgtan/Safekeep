@@ -12,16 +12,6 @@
   top: 0;
 }
 
-.MuiSelect-root input {
-  /* 6.5px = 18.5px - 12px (note: 18.5px is the input's default padding top and bottom) */
-  padding-top: 6.5px;
-  padding-bottom: 6.5px;
-}
-
-.MuiSelect-root label {
-  top: -12px;
-}
-
-.MuiSelect-root label[data-shrink="true"] {
-  top: 0;
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 6.5px 14px;
 }
