@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box/Box";
-import { Form, Formik, FormikHelpers } from "formik";
+import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
 import { tradeInputSchema } from "./Formik/yup.schema";
@@ -24,15 +24,26 @@ export interface TradeData {
     name: string;
     account: {
       id: string;
+      cashBalance: number;
+      equityBalance: number;
+      fixedIncomeBal: number;
       trade: TradeProps[];
     };
   };
+}
+
+export interface AccountBalance extends FormikValues {
+  cashBalance?: number;
+  equityBalance?: number;
+  fixedIncomeBal?: number;
 }
 
 const Trades = () => {
   const [render, setRender] = useState(1);
   const [success, setSuccess] = useState("");
   const [accountId, setAccountId] = useState("");
+  const [accountBal, setAccountBal] = useState<AccountBalance>({});
+  console.log(accountBal);
 
   const handleTradeInput = async (
     values: TradeProps,
@@ -46,32 +57,211 @@ const Trades = () => {
       const formatTradeDate = tDate.toISOString();
       const sDate = new Date(settlementDate);
       const formatSettlementData = sDate.toISOString();
-      const { data } = await axios.post(
-        "/api/trades",
-        {
-          tradeDate: formatTradeDate,
-          settlementDate: formatSettlementData,
-          stockType,
-          position,
-          settlementAmt,
-          custodyAccountId: accountId,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+      // checking against account balances
+      const { cashBalance, equityBalance, fixedIncomeBal } = accountBal;
+      if (position === "buy") {
+        const newCashBalance = Number(cashBalance) - Number(settlementAmt);
+        if (newCashBalance < 0) {
+          setSuccess("Insufficient Cash to Buy");
+        } else if (stockType === "equity") {
+          const newEquityBalance =
+            Number(equityBalance) + Number(settlementAmt);
+          const { data } = await axios.put(
+            `/api/accounts/${accountId}`,
+            {
+              cashBalance: newCashBalance,
+              equityBalance: newEquityBalance,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          if (!data) {
+            setSuccess("Network Error");
+          } else {
+            // Create
+            const { data } = await axios.post(
+              "/api/trades",
+              {
+                tradeDate: formatTradeDate,
+                settlementDate: formatSettlementData,
+                stockType,
+                position,
+                settlementAmt,
+                custodyAccountId: accountId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            );
+            if (!data) {
+              throw new Error("Network Error");
+            }
+            if (data !== null) {
+              setSuccess("Trade input successful");
+              setRender(render + 1);
+              actions.resetForm();
+            }
+            return data;
+          }
+        } else if (stockType === "fixedIncome") {
+          const newFixedIncomeBal =
+            Number(fixedIncomeBal) + Number(settlementAmt);
+          const { data } = await axios.put(
+            `/api/accounts/${accountId}`,
+            {
+              cashBalance: newCashBalance,
+              fixedIncomeBal: newFixedIncomeBal,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          if (!data) {
+            setSuccess("Network Error");
+          } else {
+            // Create
+            const { data } = await axios.post(
+              "/api/trades",
+              {
+                tradeDate: formatTradeDate,
+                settlementDate: formatSettlementData,
+                stockType,
+                position,
+                settlementAmt,
+                custodyAccountId: accountId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            );
+            if (!data) {
+              throw new Error("Network Error");
+            }
+            if (data !== null) {
+              setSuccess("Trade input successful");
+              setRender(render + 1);
+              actions.resetForm();
+            }
+            return data;
+          }
         }
-      );
-      if (!data) {
-        throw new Error("Network Error");
+      } else if (position === "sell") {
+        const newCashBalance = Number(cashBalance) + Number(settlementAmt);
+        if (stockType === "equity") {
+          const newEquityBalance =
+            Number(equityBalance) - Number(settlementAmt);
+          if (newEquityBalance < 0) {
+            setSuccess("Insufficient Equity to Sell");
+          }
+          const { data } = await axios.put(
+            `/api/accounts/${accountId}`,
+            {
+              cashBalance: newCashBalance,
+              equityBalance: newEquityBalance,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          if (!data) {
+            setSuccess("Network Error");
+          } else {
+            // Create
+            const { data } = await axios.post(
+              "/api/trades",
+              {
+                tradeDate: formatTradeDate,
+                settlementDate: formatSettlementData,
+                stockType,
+                position,
+                settlementAmt,
+                custodyAccountId: accountId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            );
+            if (!data) {
+              throw new Error("Network Error");
+            }
+            if (data !== null) {
+              setSuccess("Trade input successful");
+              setRender(render + 1);
+              actions.resetForm();
+            }
+            return data;
+          }
+        } else if (stockType === "fixedIncome") {
+          const newFixedIncomeBal =
+            Number(fixedIncomeBal) - Number(settlementAmt);
+          if (newFixedIncomeBal < 0) {
+            setSuccess("Insufficient Fixed Income to Sell");
+          }
+          const { data } = await axios.put(
+            `/api/accounts/${accountId}`,
+            {
+              cashBalance: newCashBalance,
+              fixedIncomeBal: newFixedIncomeBal,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          if (!data) {
+            setSuccess("Network Error");
+          } else {
+            // Create
+            const { data } = await axios.post(
+              "/api/trades",
+              {
+                tradeDate: formatTradeDate,
+                settlementDate: formatSettlementData,
+                stockType,
+                position,
+                settlementAmt,
+                custodyAccountId: accountId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+              }
+            );
+            if (!data) {
+              throw new Error("Network Error");
+            }
+            if (data !== null) {
+              setSuccess("Trade input successful");
+              setRender(render + 1);
+              actions.resetForm();
+            }
+            return data;
+          }
+        }
       }
-      if (data !== null) {
-        setSuccess("Trade input successful");
-        setRender(render + 1);
-        actions.resetForm();
-      }
-      return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.log("error message: ", error.response?.data.msg);
@@ -94,7 +284,11 @@ const Trades = () => {
           justifyContent: "center",
         }}
       >
-        <TradeTable setAccountId={setAccountId} render={render} />
+        <TradeTable
+          setAccountId={setAccountId}
+          render={render}
+          setAccountBal={setAccountBal}
+        />
       </Box>
       <Box
         sx={{

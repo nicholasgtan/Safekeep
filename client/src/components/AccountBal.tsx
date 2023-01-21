@@ -184,6 +184,9 @@ const AccountBal = () => {
     const newCashBalance =
       Number(accountDetails.userClient.account.cashBalance) -
       Number(values.cashBalance);
+    if (newCashBalance < 0) {
+      setSuccessW("Insufficient Cash to Withdraw");
+    }
     try {
       const { data } = await axios.put(
         `/api/accounts/cash/${accountDetails.userClient.account.id}`,

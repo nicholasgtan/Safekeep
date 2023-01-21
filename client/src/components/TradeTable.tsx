@@ -8,7 +8,7 @@ import {
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import formatDate from "../utils/formatDate";
-import { TradeData, TradeProps } from "./Trades";
+import { AccountBalance, TradeData, TradeProps } from "./Trades";
 import axios from "axios";
 import AuthAPI from "../utils/AuthAPI";
 import LoadingAPI from "../utils/LoadingAPI";
@@ -27,10 +27,15 @@ const columns: GridColDef[] = [
 
 interface TradesPageProps {
   setAccountId: Dispatch<SetStateAction<string>>;
+  setAccountBal: Dispatch<SetStateAction<AccountBalance>>;
   render: number;
 }
 
-export default function TradeTable({ setAccountId, render }: TradesPageProps) {
+export default function TradeTable({
+  setAccountId,
+  render,
+  setAccountBal,
+}: TradesPageProps) {
   const [clientName, setClientName] = useState("");
   const [database, setDatabase] = useState<TradeProps[]>([]);
   const { session } = useContext(AuthAPI);
@@ -48,9 +53,15 @@ export default function TradeTable({ setAccountId, render }: TradesPageProps) {
           throw new Error("Network Error");
         }
         if (data !== null) {
-          setAccountId(data.userClient.account.id);
+          const { cashBalance, equityBalance, fixedIncomeBal, id, trade } =
+            data.userClient.account;
+          setAccountBal({
+            cashBalance,
+            equityBalance,
+            fixedIncomeBal,
+          });
+          setAccountId(id);
           setClientName(data.userClient.name);
-          const { trade } = data.userClient.account;
           setDatabase(trade);
           setLoading(false);
           return trade;
@@ -69,7 +80,7 @@ export default function TradeTable({ setAccountId, render }: TradesPageProps) {
       }
     };
     fetchData();
-  }, [session.currentUserId, setLoading, setAccountId, render]);
+  }, [session.currentUserId, setLoading, setAccountId, render, setAccountBal]);
 
   const rows = () => {
     const mapDatabase = database.map((trade) => {

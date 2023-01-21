@@ -268,6 +268,9 @@ const userGetClientTrades = Prisma.validator<Prisma.UserArgs>()({
         account: {
           select: {
             id: true,
+            cashBalance: true,
+            equityBalance: true,
+            fixedIncomeBal: true,
             trade: true,
           },
         },
@@ -292,6 +295,9 @@ export const UserGetClientTradesById = async (
           account: {
             select: {
               id: true,
+              cashBalance: true,
+              equityBalance: true,
+              fixedIncomeBal: true,
               trade: true,
             },
           },
