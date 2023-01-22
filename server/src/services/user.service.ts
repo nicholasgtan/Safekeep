@@ -307,6 +307,68 @@ export const UserGetClientTradesById = async (
   });
 };
 
+//* Client access trades by User id:
+const userGetClientDashboard = Prisma.validator<Prisma.UserArgs>()({
+  select: {
+    userClient: {
+      select: {
+        name: true,
+        accountRep: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        account: {
+          select: {
+            id: true,
+            cashBalance: true,
+            equityBalance: true,
+            fixedIncomeBal: true,
+            trade: true,
+          },
+        },
+      },
+    },
+  },
+});
+
+type UserGetClientAll = Prisma.UserGetPayload<typeof userGetClientDashboard>;
+
+export const UserGetClientAllById = async (
+  id: string
+): Promise<UserGetClientAll | null> => {
+  return prisma.user.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      userClient: {
+        select: {
+          name: true,
+          accountRep: {
+            select: {
+              email: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+          account: {
+            select: {
+              id: true,
+              cashBalance: true,
+              equityBalance: true,
+              fixedIncomeBal: true,
+              trade: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
 export const clientUpdateUser = async (
   user: Omit<ClientUserAccess, "id">,
   id: string

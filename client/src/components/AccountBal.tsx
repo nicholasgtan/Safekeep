@@ -15,6 +15,27 @@ import { cashBalSchema } from "./Formik/yup.schema";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+export interface AccountData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  userClient: {
+    name: string;
+    accountRep: {
+      id: string;
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+    account: {
+      id: string;
+      cashBalance: number;
+      equityBalance: number;
+      fixedIncomeBal: number;
+    };
+  };
+}
+
 const AccountBal = () => {
   const { session } = useContext(AuthAPI);
   const { loading, setLoading } = useContext(LoadingAPI);
@@ -41,27 +62,6 @@ const AccountBal = () => {
       },
     },
   });
-
-  interface AccountData {
-    email: string;
-    firstName: string;
-    lastName: string;
-    userClient: {
-      name: string;
-      accountRep: {
-        id: string;
-        email: string;
-        firstName: string;
-        lastName: string;
-      };
-      account: {
-        id: string;
-        cashBalance: number;
-        equityBalance: number;
-        fixedIncomeBal: number;
-      };
-    };
-  }
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -247,16 +247,25 @@ const AccountBal = () => {
               <Box sx={{ position: "relative", width: "30vw", height: "60vh" }}>
                 <Pie data={pieData} />
               </Box>
-              <Box sx={{ width: "35%" }}>
+              <Box
+                sx={{
+                  width: "35%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography>Cash Balance:</Typography>
+                  <Typography variant="h6">Cash Balance:</Typography>
                   <br />
-                  <Typography>${formatCurrency(cashBalance)}</Typography>
+                  <Typography variant="h6">
+                    ${formatCurrency(cashBalance)}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
@@ -264,8 +273,10 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography>Equity Balance:</Typography>
-                  <Typography>${formatCurrency(equityBalance)}</Typography>
+                  <Typography variant="h6">Equity Balance:</Typography>
+                  <Typography variant="h6">
+                    ${formatCurrency(equityBalance)}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
@@ -273,8 +284,10 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography>Fixed Income Balance:</Typography>
-                  <Typography>${formatCurrency(fixedIncomeBal)}</Typography>
+                  <Typography variant="h6">Fixed Income Balance:</Typography>
+                  <Typography variant="h6">
+                    ${formatCurrency(fixedIncomeBal)}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
@@ -282,8 +295,10 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography>Total NAV:</Typography>
-                  <Typography>${formatCurrency(totalNav)}</Typography>
+                  <Typography variant="h6">Total NAV:</Typography>
+                  <Typography variant="h6">
+                    ${formatCurrency(totalNav)}
+                  </Typography>
                 </Box>
               </Box>
             </Box>

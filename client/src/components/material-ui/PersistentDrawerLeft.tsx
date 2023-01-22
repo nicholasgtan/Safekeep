@@ -78,7 +78,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
   const theme = useTheme();
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("Dashboard");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -93,7 +93,7 @@ export default function PersistentDrawerLeft() {
   };
 
   const handleTitle = (event: React.MouseEvent) => {
-    const title = (event.target as HTMLElement).innerHTML;
+    const title = (event.target as HTMLElement).innerText;
     setTitle(title);
   };
 
@@ -183,11 +183,11 @@ export default function PersistentDrawerLeft() {
               key={list.navi}
             >
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={handleTitle}>
                   <ListItemIcon>
                     <list.icon />
                   </ListItemIcon>
-                  <ListItemText primary={list.name} onClick={handleTitle} />
+                  <ListItemText primary={list.name} />
                 </ListItemButton>
               </ListItem>
             </NavLink>

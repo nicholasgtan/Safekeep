@@ -76,6 +76,32 @@ userRouter.get("/trades/:id", async (request: Request, response: Response) => {
   }
 });
 
+//*  GET: User Client get All by Id (for dashboard)
+userRouter.get(
+  "/dashboard/:id",
+  async (request: Request, response: Response) => {
+    const id: string = request.params.id;
+    try {
+      const account = await UserService.UserGetClientAllById(id);
+      if (account) {
+        const bigIntSerialized = () => {
+          return JSON.parse(
+            JSON.stringify(
+              account,
+              (key, value) =>
+                typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+            )
+          );
+        };
+        return response.status(200).json(bigIntSerialized());
+      }
+      return response.status(404).json({ msg: "Details not found" });
+    } catch (error: unknown) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //* POST: Create a User
 userRouter.post(
   "/",

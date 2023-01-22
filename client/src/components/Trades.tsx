@@ -43,7 +43,6 @@ const Trades = () => {
   const [success, setSuccess] = useState("");
   const [accountId, setAccountId] = useState("");
   const [accountBal, setAccountBal] = useState<AccountBalance>({});
-  console.log(accountBal);
 
   const handleTradeInput = async (
     values: TradeProps,
