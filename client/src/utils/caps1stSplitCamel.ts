@@ -1,6 +1,7 @@
-const capitaliseFirstLetter = (word: string) => {
+const caps1stSplitCamel = (word: string) => {
   const str = word;
-  const arr = str?.toLowerCase().split(" ");
+  const str1 = str.replace(/([A-Z])/g, " $1");
+  const arr = str1?.toLowerCase().split(" ");
   for (let i = 0; i < arr?.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
   }
@@ -8,4 +9,4 @@ const capitaliseFirstLetter = (word: string) => {
   return str2;
 };
 
-export default capitaliseFirstLetter;
+export default caps1stSplitCamel;

@@ -12,7 +12,7 @@ import { AccountBalance, TradeData, TradeProps } from "./Trades";
 import axios from "axios";
 import AuthAPI from "../utils/AuthAPI";
 import LoadingAPI from "../utils/LoadingAPI";
-import capitaliseFirstLetter from "../utils/capitaliseFirstLetter";
+import caps1stSplitCamel from "../utils/caps1stSplitCamel";
 import { CircularProgress, Typography } from "@mui/material";
 import formatCurrency from "../utils/formatCurrency";
 
@@ -96,8 +96,8 @@ export default function TradeTable({
       const tradeRow = {
         tradeDate: formatDate(tradeDate),
         settlementDate: formatDate(settlementDate),
-        position: capitaliseFirstLetter(position),
-        stockType: capitaliseFirstLetter(stockType),
+        position: caps1stSplitCamel(position),
+        stockType: caps1stSplitCamel(stockType),
         settlementAmt: formatCurrency(settlementAmt),
         id: id,
       };
