@@ -25,3 +25,16 @@ export const tradeInputSchema = yup.object().shape({
     .required("Required"),
   settlementAmt: yup.number().min(1, "Amount cannot be 0").required("Required"),
 });
+
+export const clientSchema = yup.object().shape({
+  name: yup.string().required("Required"),
+  type: yup.string().required("Required"),
+});
+
+export const userSchema = yup.object().shape({
+  email: yup.string().email("Please enter a valid email").required("Required"),
+  firstName: yup.string().required("Required").trim(),
+  lastName: yup.string().required("Required").trim(),
+  password: yup.string().required("Required"),
+  userClientId: yup.string().required("Required"),
+});

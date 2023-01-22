@@ -69,6 +69,7 @@ const Clients = () => {
   useEffect(() => {
     const fetchClients = async () => {
       try {
+        setLoading(true);
         setLoadClientList(true);
         const { data } = await axios.get<Client[]>(
           `/api/clients/all/${session.currentUserId}`
@@ -81,10 +82,12 @@ const Clients = () => {
           setClientList(data);
           setClient(data[0]);
           setLoadClientList(false);
+          setLoading(false);
         }
         return data;
       } catch (error) {
         setLoadClientList(false);
+        setLoading(false);
         if (axios.isAxiosError(error)) {
           console.log("error message: ", error.response?.data.msg);
           // setStatus(error.response?.data.msg);
@@ -97,7 +100,7 @@ const Clients = () => {
       }
     };
     fetchClients();
-  }, [session.currentUserId, setLoadClientList]);
+  }, [session.currentUserId, setLoadClientList, setLoading]);
 
   const { cashBalance, equityBalance, fixedIncomeBal } = client.account;
 

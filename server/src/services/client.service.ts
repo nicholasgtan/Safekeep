@@ -160,11 +160,12 @@ export const createClient = async (
 export const createClientWithAcc = async (
   client: Omit<Client, "id">
 ): Promise<Client> => {
-  const { name, type } = client;
+  const { name, type, accountRepId } = client;
   return prisma.client.create({
     data: {
       name,
       type,
+      accountRepId,
       account: {
         create: {
           cashBalance: 0,
