@@ -23,6 +23,29 @@ clientRouter.get("/", async (request: Request, response: Response) => {
   }
 });
 
+//* GET: Get all Clients under Rep id
+clientRouter.get("/all/:id", async (request: Request, response: Response) => {
+  const id: string = request.params.id;
+  try {
+    const clients = await ClientService.listClientsByRepId(id);
+    if (clients) {
+      const bigIntSerialized = () => {
+        return JSON.parse(
+          JSON.stringify(
+            clients,
+            (key, value) =>
+              typeof value === "bigint" ? value.toString() : value // return everything else unchanged
+          )
+        );
+      };
+      return response.status(200).json(bigIntSerialized());
+    }
+    return response.status(404).json("No Clients");
+  } catch (error: unknown) {
+    return response.status(500).json({ error });
+  }
+});
+
 //* GET: A single Client by Id
 clientRouter.get("/:id", async (request: Request, response: Response) => {
   const id: string = request.params.id;

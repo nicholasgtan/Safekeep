@@ -37,17 +37,32 @@ export default function AppFooter() {
         }}
       >
         <Box sx={{ component: "li", mx: 1, my: 4, display: "inline" }}>
-          <Link variant="body2" color="primary.main" href="">
-            About Us
+          <Link
+            variant="body2"
+            color="primary.main"
+            href=""
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            About Safekeep
           </Link>
         </Box>
         <Box sx={{ component: "li", mx: 1, my: 4, display: "inline" }}>
-          <Link variant="body2" color="primary.main" href="">
+          <Link
+            variant="body2"
+            color="primary.main"
+            href=""
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             Contact
           </Link>
         </Box>
         <Box sx={{ component: "li", mx: 1, my: 4, display: "inline" }}>
-          <Link variant="body2" color="primary.main" href="">
+          <Link
+            variant="body2"
+            color="primary.main"
+            href=""
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
             Help Centre
           </Link>
         </Box>

@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { Client } from "../../../node_modules/.prisma/client";
 import prisma from "../utils/prisma.connection";
 
@@ -30,17 +31,51 @@ export const listClients = async (): Promise<Client[]> => {
   });
 };
 
-export const getClientById = async (id: string): Promise<Client | null> => {
-  return prisma.client.findUnique({
-    where: {
-      id,
+//* GET all clients by accountRepId
+const getClientsByAccountRepId = Prisma.validator<Prisma.ClientArgs>()({
+  select: {
+    id: true,
+    name: true,
+    type: true,
+    account: {
+      select: {
+        cashBalance: true,
+        equityBalance: true,
+        fixedIncomeBal: true,
+        trade: true,
+      },
     },
-    include: {
+    userList: {
+      select: {
+        email: true,
+        firstName: true,
+        lastName: true,
+      },
+    },
+  },
+});
+
+type GetClientsByAccountRepId = Prisma.ClientGetPayload<
+  typeof getClientsByAccountRepId
+>;
+
+export const listClientsByRepId = async (
+  id: string
+): Promise<GetClientsByAccountRepId[]> => {
+  return prisma.client.findMany({
+    where: {
+      accountRepId: id,
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
       account: {
         select: {
           cashBalance: true,
           equityBalance: true,
           fixedIncomeBal: true,
+          trade: true,
         },
       },
       userList: {
@@ -50,7 +85,33 @@ export const getClientById = async (id: string): Promise<Client | null> => {
           lastName: true,
         },
       },
-      accountRep: {
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+};
+
+export const getClientById = async (
+  id: string
+): Promise<GetClientsByAccountRepId | null> => {
+  return prisma.client.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      account: {
+        select: {
+          cashBalance: true,
+          equityBalance: true,
+          fixedIncomeBal: true,
+          trade: true,
+        },
+      },
+      userList: {
         select: {
           email: true,
           firstName: true,

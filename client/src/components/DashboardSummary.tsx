@@ -1,12 +1,6 @@
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import {
-  useState,
-  useContext,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
-import { TradeData, TradeProps } from "./Trades";
+import { useState, useContext, useEffect } from "react";
+import { TradeProps } from "./Trades";
 import AuthAPI from "../utils/AuthAPI";
 import LoadingAPI from "../utils/LoadingAPI";
 import axios from "axios";
@@ -14,10 +8,25 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import formatDate from "../utils/formatDate";
 import caps1stSplitCamel from "../utils/caps1stSplitCamel";
 import formatCurrency from "../utils/formatCurrency";
-import { NavLink } from "react-router-dom";
 import { Pie } from "react-chartjs-2";
-import { Link } from "react-router-dom";
-import Access from "./Access";
+
+interface DashboardData {
+  userClient: {
+    name: string;
+    accountRep: {
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+    account: {
+      id: string;
+      cashBalance: number;
+      equityBalance: number;
+      fixedIncomeBal: number;
+      trade: TradeProps[];
+    };
+  };
+}
 
 const columns: GridColDef[] = [
   { field: "tradeDate", headerName: "Trade Date", minWidth: 120 },
@@ -29,39 +38,25 @@ const columns: GridColDef[] = [
 ];
 
 const DashboardSummary = () => {
-  const [accountId, setAccountId] = useState("");
-  const [database, setDatabase] = useState<TradeProps[]>([]);
   const { session } = useContext(AuthAPI);
   const { loading, setLoading } = useContext(LoadingAPI);
-  const [clientName, setClientName] = useState("");
-  const [accountDetails, setAccountDetails] = useState({
-    cashBalance: 0,
-    equityBalance: 0,
-    fixedIncomeBal: 0,
-  });
-  const [accountRep, setAccountRep] = useState({
-    email: "",
-    firstName: "",
-    lastName: "",
-  });
-
-  interface DashboardData {
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
     userClient: {
-      name: string;
+      name: "",
       accountRep: {
-        email: string;
-        firstName: string;
-        lastName: string;
-      };
+        email: "",
+        firstName: "",
+        lastName: "",
+      },
       account: {
-        id: string;
-        cashBalance: number;
-        equityBalance: number;
-        fixedIncomeBal: number;
-        trade: TradeProps[];
-      };
-    };
-  }
+        id: "",
+        cashBalance: 0,
+        equityBalance: 0,
+        fixedIncomeBal: 0,
+        trade: [],
+      },
+    },
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,14 +70,9 @@ const DashboardSummary = () => {
           throw new Error("Network Error");
         }
         if (data !== null) {
-          const { id, trade } = data.userClient.account;
-          setAccountId(id);
-          setAccountDetails(data.userClient.account);
-          setClientName(data.userClient.name);
-          setAccountRep(data.userClient.accountRep);
-          setDatabase(trade);
+          setDashboardData(data);
           setLoading(false);
-          return trade;
+          return data;
         }
       } catch (error) {
         setLoading(false);
@@ -98,9 +88,10 @@ const DashboardSummary = () => {
       }
     };
     fetchData();
-  }, [session.currentUserId, setLoading, setAccountId]);
+  }, [session.currentUserId, setLoading]);
 
-  const { cashBalance, equityBalance, fixedIncomeBal } = accountDetails;
+  const { cashBalance, equityBalance, fixedIncomeBal } =
+    dashboardData.userClient.account;
 
   const totalNav =
     Number(cashBalance) + Number(equityBalance) + Number(fixedIncomeBal);
@@ -131,7 +122,7 @@ const DashboardSummary = () => {
   };
 
   const rows = () => {
-    const mapDatabase = database.map((trade) => {
+    const mapDatabase = dashboardData.userClient.account.trade.map((trade) => {
       const {
         tradeDate,
         settlementDate,
@@ -169,7 +160,7 @@ const DashboardSummary = () => {
         </Box>
       ) : (
         <Box>
-          <Typography variant="h3">{clientName}</Typography>
+          <Typography variant="h3">{dashboardData.userClient.name}</Typography>
         </Box>
       )}
       <Box
@@ -316,7 +307,7 @@ const DashboardSummary = () => {
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Typography variant="h5">Account Manager</Typography>
                   <a
-                    href={`mailto:${accountRep.email}`}
+                    href={`mailto:${dashboardData.userClient.accountRep.email}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <Button variant="contained">Contact</Button>
@@ -324,10 +315,17 @@ const DashboardSummary = () => {
                 </Box>
                 <br />
                 <Typography variant="h6">
-                  Name: {caps1stSplitCamel(accountRep.firstName)}{" "}
-                  {caps1stSplitCamel(accountRep.lastName)}
+                  Name:{" "}
+                  {caps1stSplitCamel(
+                    dashboardData.userClient.accountRep.firstName
+                  )}{" "}
+                  {caps1stSplitCamel(
+                    dashboardData.userClient.accountRep.lastName
+                  )}
                 </Typography>
-                <Typography variant="h6">Email: {accountRep.email}</Typography>
+                <Typography variant="h6">
+                  Email: {dashboardData.userClient.accountRep.email}
+                </Typography>
               </Box>
             </Box>
           )}

@@ -21,7 +21,7 @@ import WaterfallChartIcon from "@mui/icons-material/WaterfallChart";
 import PeopleIcon from "@mui/icons-material/People";
 import KeyIcon from "@mui/icons-material/Key";
 import AuthAPI from "../../utils/AuthAPI";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import LoadingAPI from "../../utils/LoadingAPI";
 
@@ -83,6 +83,12 @@ export default function PersistentDrawerLeft() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const { session } = useContext(AuthAPI);
+
+  useEffect(() => {
+    if (session.role === "admin") {
+      setTitle("Client");
+    }
+  }, [session.role]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -175,25 +181,26 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {standardDashboard.map((list) => (
-            <NavLink
-              to={`/dashboard/${list.navi}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-              key={list.navi}
-            >
-              <ListItem disablePadding>
-                <ListItemButton onClick={handleTitle}>
-                  <ListItemIcon>
-                    <list.icon />
-                  </ListItemIcon>
-                  <ListItemText primary={list.name} />
-                </ListItemButton>
-              </ListItem>
-            </NavLink>
-          ))}
-        </List>
-        {session.role === "admin" ? (
+        {session.role !== "admin" ? (
+          <List>
+            {standardDashboard.map((list) => (
+              <NavLink
+                to={`/dashboard/${list.navi}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+                key={list.navi}
+              >
+                <ListItem disablePadding>
+                  <ListItemButton onClick={handleTitle}>
+                    <ListItemIcon>
+                      <list.icon />
+                    </ListItemIcon>
+                    <ListItemText primary={list.name} />
+                  </ListItemButton>
+                </ListItem>
+              </NavLink>
+            ))}
+          </List>
+        ) : (
           <>
             <Divider />
             <List>
@@ -204,7 +211,7 @@ export default function PersistentDrawerLeft() {
                   key={list.navi}
                 >
                   <ListItem key={list.navi} disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={handleTitle}>
                       <ListItemIcon>
                         <list.icon />
                       </ListItemIcon>
@@ -215,8 +222,6 @@ export default function PersistentDrawerLeft() {
               ))}
             </List>
           </>
-        ) : (
-          <></>
         )}
       </Drawer>
       <Main open={open}>
