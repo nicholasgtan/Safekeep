@@ -13,14 +13,14 @@ import formatCurrency from "../utils/formatCurrency";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Pie } from "react-chartjs-2";
 
-interface UserList {
+export interface UserList {
   email: string;
   firstName: string;
   lastName: string;
   id?: string;
 }
 
-interface Client extends FormikValues {
+export interface Client extends FormikValues {
   id?: string;
   name: string;
   type: string;
