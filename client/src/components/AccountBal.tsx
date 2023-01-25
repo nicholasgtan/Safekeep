@@ -245,7 +245,22 @@ const AccountBal = () => {
             <br />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Box sx={{ position: "relative", width: "30vw", height: "60vh" }}>
-                <Pie data={pieData} />
+                {Number(cashBalance) === 0 &&
+                Number(equityBalance) === 0 &&
+                Number(fixedIncomeBal) === 0 ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <Typography variant="body1">No Data</Typography>
+                  </Box>
+                ) : (
+                  <Pie data={pieData} />
+                )}
               </Box>
               <Box
                 sx={{
