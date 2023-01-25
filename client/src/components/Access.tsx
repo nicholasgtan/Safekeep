@@ -28,6 +28,7 @@ const Access = () => {
   const [userStatus, setUserStatus] = useState("");
   const [clientList, setClientList] = useState<Client[]>([]);
   const [loadClientList, setLoadClientList] = useState<boolean>(false);
+  const [render, setRender] = useState(0);
 
   useEffect(() => {
     const fetchClients = async () => {
@@ -59,7 +60,7 @@ const Access = () => {
       }
     };
     fetchClients();
-  }, [session.currentUserId, setLoadClientList]);
+  }, [session.currentUserId, setLoadClientList, render]);
 
   const clientListMap = clientList.map((option: Client) => {
     return (
@@ -94,6 +95,7 @@ const Access = () => {
       }
       if (data !== null) {
         setClientStatus("Client successfully created");
+        setRender(render + 1);
         actions.resetForm();
       }
       return data;

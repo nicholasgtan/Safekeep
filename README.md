@@ -1,7 +1,23 @@
 # Safekeep
 
 Custody Services portal for institutional clients to view their account balances, input trades and view trade history.
-[View Demo](https://safekeep.onrender.com/)
+
+<!-- DEMO -->
+<details>
+  <summary>Demo</summary>
+  <ul>
+    <li><a href="https://safekeep.onrender.com/">View Demo</a></li>
+    <li>
+      Demo Login
+      <ul>
+        <li>Email: demo@email.com</li>
+        <li>Password: demo</li>
+      </ul>
+    </li>
+    <li>Note:  This site is hosted on Render and is automatically spun down after a period of inactivity. Please allow up to 30 seconds for the service to spin back up!</li>
+  </ul>
+</details>
+<br />
 
 ## About the project
 
