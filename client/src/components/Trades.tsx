@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box/Box";
 import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import CustomInput from "./Formik/CustomInput";
@@ -9,6 +10,8 @@ import { tradeInputSchema } from "./Formik/yup.schema";
 import TradeTable from "./TradeTable";
 import CustomSelect from "./Formik/CustomSelect";
 import MenuItem from "@mui/material/MenuItem";
+import AuthAPI from "../utils/AuthAPI";
+import LoadingAPI from "../utils/LoadingAPI";
 
 export interface TradeProps {
   tradeDate: string;
@@ -38,11 +41,62 @@ export interface AccountBalance extends FormikValues {
   fixedIncomeBal?: number;
 }
 
+// interface TradesPageProps {
+//   setAccountId: Dispatch<SetStateAction<string>>;
+//   setAccountBal: Dispatch<SetStateAction<AccountBalance>>;
+//   render: number;
+// }
+
 const Trades = () => {
   const [render, setRender] = useState(1);
   const [success, setSuccess] = useState("");
   const [accountId, setAccountId] = useState("");
   const [accountBal, setAccountBal] = useState<AccountBalance>({});
+  const [clientName, setClientName] = useState("");
+  const [database, setDatabase] = useState<TradeProps[]>([]);
+  const { session } = useContext(AuthAPI);
+  const { loading, setLoading } = useContext(LoadingAPI);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const { data } = await axios.get<TradeData>(
+          `/api/users/trades/${session.currentUserId}`
+        );
+        if (!data) {
+          setLoading(false);
+          throw new Error("Network Error");
+        }
+        if (data !== null) {
+          const { cashBalance, equityBalance, fixedIncomeBal, id, trade } =
+            data.userClient.account;
+          setAccountBal({
+            cashBalance,
+            equityBalance,
+            fixedIncomeBal,
+          });
+          setAccountId(id);
+          setClientName(data.userClient.name);
+          setDatabase(trade);
+          setLoading(false);
+          return trade;
+        }
+      } catch (error) {
+        setLoading(false);
+        if (axios.isAxiosError(error)) {
+          console.log("error message: ", error.response?.data.msg);
+          // setStatus(error.response?.data.msg);
+          // 👇️ error: AxiosError<any, any>
+          return error.message;
+        } else {
+          // console.log("unexpected error: ", error);
+          return "An unexpected error occurred";
+        }
+      }
+    };
+    fetchData();
+  }, [session.currentUserId, setLoading, setAccountId, render, setAccountBal]);
 
   const handleTradeInput = async (
     values: TradeProps,
@@ -283,11 +337,34 @@ const Trades = () => {
           justifyContent: "center",
         }}
       >
-        <TradeTable
+        {/* <TradeTable
           setAccountId={setAccountId}
           render={render}
           setAccountBal={setAccountBal}
-        />
+        /> */}
+        {loading ? (
+          <Box sx={{ alignSelf: "center" }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box sx={{ width: "90%" }}>
+            <Typography variant="h3">{clientName}</Typography>
+            <br />
+            <Box sx={{ height: "60vh", width: "100%" }}>
+              {/* <DataGrid
+              rows={rows()}
+              columns={columns}
+              // pageSize={5}
+              // rowsPerPageOptions={[5]}
+              checkboxSelection
+              disableSelectionOnClick
+              experimentalFeatures={{ newEditingApi: true }}
+              autoPageSize={true}
+            /> */}
+              <TradeTable database={database} />
+            </Box>
+          </Box>
+        )}
       </Box>
       <Box
         sx={{

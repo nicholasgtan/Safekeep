@@ -4,11 +4,10 @@ import { TradeProps } from "./Trades";
 import AuthAPI from "../utils/AuthAPI";
 import LoadingAPI from "../utils/LoadingAPI";
 import axios from "axios";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import formatDate from "../utils/formatDate";
 import caps1stSplitCamel from "../utils/caps1stSplitCamel";
 import formatCurrency from "../utils/formatCurrency";
 import PieChart from "./PieChart";
+import TradeTable from "./TradeTable";
 
 interface DashboardData {
   userClient: {
@@ -27,15 +26,6 @@ interface DashboardData {
     };
   };
 }
-
-const columns: GridColDef[] = [
-  { field: "tradeDate", headerName: "Trade Date", minWidth: 120 },
-  { field: "settlementDate", headerName: "Settlement Date", minWidth: 120 },
-  { field: "position", headerName: "Buy/Sell", minWidth: 100 },
-  { field: "stockType", headerName: "Equity/FixedIncome", minWidth: 150 },
-  { field: "settlementAmt", headerName: "Settlement Amount", minWidth: 150 },
-  { field: "id", headerName: "Trade ID", minWidth: 250, flex: 1 },
-];
 
 const DashboardSummary = () => {
   const { session } = useContext(AuthAPI);
@@ -95,30 +85,6 @@ const DashboardSummary = () => {
 
   const totalNav =
     Number(cashBalance) + Number(equityBalance) + Number(fixedIncomeBal);
-
-  const rows = () => {
-    const mapDatabase = dashboardData.userClient.account.trade.map((trade) => {
-      const {
-        tradeDate,
-        settlementDate,
-        position,
-        stockType,
-        settlementAmt,
-        id,
-      } = trade;
-
-      const tradeRow = {
-        tradeDate: formatDate(tradeDate),
-        settlementDate: formatDate(settlementDate),
-        position: caps1stSplitCamel(position),
-        stockType: caps1stSplitCamel(stockType),
-        settlementAmt: formatCurrency(settlementAmt),
-        id: id,
-      };
-      return tradeRow;
-    });
-    return mapDatabase;
-  };
 
   return (
     <Box
@@ -336,16 +302,7 @@ const DashboardSummary = () => {
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="h5">Trades Summary</Typography>
             </Box>
-            <DataGrid
-              rows={rows()}
-              columns={columns}
-              // pageSize={5}
-              // rowsPerPageOptions={[5]}
-              checkboxSelection
-              disableSelectionOnClick
-              experimentalFeatures={{ newEditingApi: true }}
-              autoPageSize={true}
-            />
+            <TradeTable database={dashboardData.userClient.account.trade} />
           </Box>
         )}
       </Box>
