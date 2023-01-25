@@ -46,7 +46,7 @@ const PieChart = ({ cashBalance, equityBalance, fixedIncomeBal }: PieProps) => {
             height: "100%",
           }}
         >
-          <Typography variant="body1">No Data</Typography>
+          <Typography variant="body2">No data</Typography>
         </Box>
       ) : (
         <Pie data={pieData} />
