@@ -8,7 +8,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import formatDate from "../utils/formatDate";
 import caps1stSplitCamel from "../utils/caps1stSplitCamel";
 import formatCurrency from "../utils/formatCurrency";
-import { Pie } from "react-chartjs-2";
+import PieChart from "./PieChart";
 
 interface DashboardData {
   userClient: {
@@ -95,31 +95,6 @@ const DashboardSummary = () => {
 
   const totalNav =
     Number(cashBalance) + Number(equityBalance) + Number(fixedIncomeBal);
-
-  const pieData = {
-    labels: ["Cash", "Equity", "Fixed Income"],
-    datasets: [
-      {
-        label: "Total NAV Value",
-        data: [
-          Number(cashBalance),
-          Number(equityBalance),
-          Number(fixedIncomeBal),
-        ],
-        backgroundColor: [
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-        ],
-        borderColor: [
-          "rgba(75, 192, 192, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
 
   const rows = () => {
     const mapDatabase = dashboardData.userClient.account.trade.map((trade) => {
@@ -217,22 +192,11 @@ const DashboardSummary = () => {
                   <Box
                     sx={{ position: "relative", width: "10vw", height: "20vh" }}
                   >
-                    {Number(cashBalance) === 0 &&
-                    Number(equityBalance) === 0 &&
-                    Number(fixedIncomeBal) === 0 ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          height: "100%",
-                        }}
-                      >
-                        <Typography variant="body1">No Data</Typography>
-                      </Box>
-                    ) : (
-                      <Pie data={pieData} />
-                    )}
+                    <PieChart
+                      cashBalance={cashBalance}
+                      equityBalance={equityBalance}
+                      fixedIncomeBal={fixedIncomeBal}
+                    />
                   </Box>
                   <Box
                     sx={{

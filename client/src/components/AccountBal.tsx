@@ -7,11 +7,11 @@ import Box from "@mui/material/Box/Box";
 import { CircularProgress } from "@mui/material";
 import formatCurrency from "../utils/formatCurrency";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
 import { Form, Formik, FormikHelpers, FormikValues } from "formik";
 import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
 import { cashBalSchema } from "./Formik/yup.schema";
+import PieChart from "./PieChart";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -102,31 +102,6 @@ const AccountBal = () => {
 
   const totalNav =
     Number(cashBalance) + Number(equityBalance) + Number(fixedIncomeBal);
-
-  const pieData = {
-    labels: ["Cash", "Equity", "Fixed Income"],
-    datasets: [
-      {
-        label: "Total NAV Value",
-        data: [
-          Number(cashBalance),
-          Number(equityBalance),
-          Number(fixedIncomeBal),
-        ],
-        backgroundColor: [
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-        ],
-        borderColor: [
-          "rgba(75, 192, 192, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
 
   interface CashDepo extends FormikValues {
     cashBalance: number;
@@ -245,22 +220,11 @@ const AccountBal = () => {
             <br />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Box sx={{ position: "relative", width: "30vw", height: "60vh" }}>
-                {Number(cashBalance) === 0 &&
-                Number(equityBalance) === 0 &&
-                Number(fixedIncomeBal) === 0 ? (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: "100%",
-                    }}
-                  >
-                    <Typography variant="body1">No Data</Typography>
-                  </Box>
-                ) : (
-                  <Pie data={pieData} />
-                )}
+                <PieChart
+                  cashBalance={cashBalance}
+                  equityBalance={equityBalance}
+                  fixedIncomeBal={fixedIncomeBal}
+                />
               </Box>
               <Box
                 sx={{
