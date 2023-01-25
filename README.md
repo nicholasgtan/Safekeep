@@ -7,6 +7,8 @@ Custody Services portal for institutional clients to view their account balances
 
 As my final (capstone) project for the General Assembly Software Engineering Immersive course, I decided to go back to my finance roots, referencing my time as an institutional account manager for custody service clients. This client facing application is used by clients daily to manage their accounts and transactions with the custodian. I have simplified the advanced features and database in view of the tight timeline for this project, however, the basic functionality of viewing account/trade data and creating trades will be showcased here.
 
+![image](https://user-images.githubusercontent.com/115612053/214499295-24ea3498-89ad-46c0-9aa4-6910118ca980.png)
+
 ## Client stack
 
 - Language: TypeScript
@@ -44,8 +46,8 @@ As my final (capstone) project for the General Assembly Software Engineering Imm
   - able to see trade log with pagination and trade input form
   - able to input trades and see details added to trade log
   - able to see status failure when:
-    1. buy trade with insufficient cash balance
-    2. sell trade with insufficient equity/fixed income balance
+    - buy trade with insufficient cash balance
+    - sell trade with insufficient equity/fixed income balance
   - able to see equity and fixed income trades update balances on dashboard summary and account balance view.
 
 **Admin**
