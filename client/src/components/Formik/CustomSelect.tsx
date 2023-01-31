@@ -14,6 +14,7 @@ const CustomSelect = ({ ...props }: CustomSelectProps) => {
           meta.touched &&
           meta.error && <span className="error"> {meta.error} </span>
         }
+        size="small"
       />
     </>
   );

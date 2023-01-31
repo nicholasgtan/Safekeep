@@ -329,7 +329,7 @@ const Trades = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "68vh", gap: "2rem" }}>
+    <Box sx={{ display: "flex", height: "68vh", gap: "1rem" }}>
       <Box
         sx={{
           width: "70%",
@@ -337,11 +337,6 @@ const Trades = () => {
           justifyContent: "center",
         }}
       >
-        {/* <TradeTable
-          setAccountId={setAccountId}
-          render={render}
-          setAccountBal={setAccountBal}
-        /> */}
         {loading ? (
           <Box sx={{ alignSelf: "center" }}>
             <CircularProgress />
@@ -350,17 +345,7 @@ const Trades = () => {
           <Box sx={{ width: "90%" }}>
             <Typography variant="h3">{clientName}</Typography>
             <br />
-            <Box sx={{ height: "60vh", width: "100%" }}>
-              {/* <DataGrid
-              rows={rows()}
-              columns={columns}
-              // pageSize={5}
-              // rowsPerPageOptions={[5]}
-              checkboxSelection
-              disableSelectionOnClick
-              experimentalFeatures={{ newEditingApi: true }}
-              autoPageSize={true}
-            /> */}
+            <Box sx={{ height: "50vh", width: "100%" }}>
               <TradeTable database={database} />
             </Box>
           </Box>
@@ -369,13 +354,12 @@ const Trades = () => {
       <Box
         sx={{
           width: "30%",
-          justifyContent: "center",
-          alignItems: "center",
+          // border: "solid 1px #121212",
+          height: "60vh",
         }}
       >
         <Box>
-          <Typography variant="h5">Trade Input</Typography>
-          <br />
+          <Typography variant="h6">Trade Input</Typography>
           <Formik
             initialValues={{
               tradeDate: "",
@@ -393,49 +377,108 @@ const Trades = () => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "60%",
-                  height: "60vh",
+                  // width: "80%",
+                  height: "55vh",
+                  // border: "solid 1px #121212",
                 }}
               >
-                <Typography sx={{ mb: 1 }}>Trade Date:</Typography>
-                <CustomInput
-                  name="tradeDate"
-                  type="date"
-                  placeholder="Trade date"
-                />
-                <br />
-                <Typography sx={{ mb: 1 }}>Settlement Date:</Typography>
-                <CustomInput
-                  name="settlementDate"
-                  type="date"
-                  placeholder="Settlement date"
-                />
-                <br />
-                <Typography sx={{ mb: 1 }}>Equity/Fixed Income:</Typography>
-                <CustomSelect label="Select" select={true} name="stockType">
-                  <MenuItem value="equity">Equity</MenuItem>
-                  <MenuItem value="fixedIncome">Fixed Income</MenuItem>
-                </CustomSelect>
-                <br />
-                <Typography sx={{ mb: 1 }}>Buy/Sell:</Typography>
-                <CustomSelect label="Select" select={true} name="position">
-                  <MenuItem value="buy">Buy</MenuItem>
-                  <MenuItem value="sell">Sell</MenuItem>
-                </CustomSelect>
-                <br />
-                <Typography sx={{ mb: 1 }}>Settlement Amount:</Typography>
-                <CustomInput
-                  label="Nominal"
-                  name="settlementAmt"
-                  type="number"
-                  InputProps={{ inputProps: { min: 1 } }}
-                />
-                <br />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // my: 1,
+                    // alignItems: "center",
+                    height: "10vh",
+                  }}
+                >
+                  <Typography variant="body2">Trade Date:</Typography>
+                  <CustomInput
+                    name="tradeDate"
+                    type="date"
+                    placeholder="Trade date"
+                    style={{ width: "60%" }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // my: 1,
+                    // alignItems: "center",
+                    height: "10vh",
+                  }}
+                >
+                  <Typography variant="body2">Settlement Date:</Typography>
+                  <CustomInput
+                    name="settlementDate"
+                    type="date"
+                    placeholder="Settlement date"
+                    style={{ width: "60%" }}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // my: 1,
+                    // alignItems: "center",
+                    height: "11vh",
+                  }}
+                >
+                  <Typography variant="body2">Equity/Fixed Income:</Typography>
+                  <CustomSelect
+                    label="Select"
+                    select={true}
+                    name="stockType"
+                    style={{ width: "60%" }}
+                  >
+                    <MenuItem value="equity">Equity</MenuItem>
+                    <MenuItem value="fixedIncome">Fixed Income</MenuItem>
+                  </CustomSelect>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // my: 1,
+                    // alignItems: "center",
+                    height: "11vh",
+                  }}
+                >
+                  <Typography variant="body2">Buy/Sell:</Typography>
+                  <CustomSelect
+                    label="Select"
+                    select={true}
+                    name="position"
+                    style={{ width: "60%" }}
+                  >
+                    <MenuItem value="buy">Buy</MenuItem>
+                    <MenuItem value="sell">Sell</MenuItem>
+                  </CustomSelect>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // my: 1,
+                    // alignItems: "center",
+                    height: "10vh",
+                  }}
+                >
+                  <Typography variant="body2">Settlement Amount:</Typography>
+                  <CustomInput
+                    label="Nominal"
+                    name="settlementAmt"
+                    type="number"
+                    InputProps={{ inputProps: { min: 1 } }}
+                    style={{ width: "60%" }}
+                  />
+                </Box>
                 <Button
                   variant="contained"
                   disabled={isSubmitting}
                   type="submit"
-                  sx={{ height: "36px", width: "110px" }}
+                  sx={{ height: "36px", width: "100px", my: 1 }}
                 >
                   Submit
                 </Button>

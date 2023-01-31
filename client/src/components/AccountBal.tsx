@@ -199,7 +199,7 @@ const AccountBal = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "68vh", gap: "2rem" }}>
+    <Box sx={{ display: "flex", height: "68vh", gap: "1rem" }}>
       <Box
         sx={{
           width: "70%",
@@ -292,7 +292,7 @@ const AccountBal = () => {
           alignItems: "center",
         }}
       >
-        <Box height="106.55px">
+        <Box height="10vh">
           <Typography variant="h5">Deposit Cash</Typography>
           <br />
           <Formik
@@ -327,7 +327,7 @@ const AccountBal = () => {
         </Box>
         <br />
         <br />
-        <Box height="106.55px">
+        <Box height="10vh">
           <Typography variant="h5">Withdraw Cash</Typography>
           <br />
           <Formik
