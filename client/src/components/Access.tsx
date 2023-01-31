@@ -185,14 +185,24 @@ const Access = () => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "60%",
+                  // width: "60%",
                 }}
               >
                 <Box sx={{ height: "8.5vh" }}>
-                  <CustomInput label="Client Name" name="name" type="text" />
+                  <CustomInput
+                    label="Client Name"
+                    name="name"
+                    type="text"
+                    style={{ width: "60%" }}
+                  />
                 </Box>
                 <Box sx={{ height: "8.5vh" }}>
-                  <CustomInput label="Client Type" name="type" type="text" />
+                  <CustomInput
+                    label="Client Type"
+                    name="type"
+                    type="text"
+                    style={{ width: "60%" }}
+                  />
                 </Box>
                 <input
                   name="accountRepId"
@@ -234,7 +244,7 @@ const Access = () => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "60%",
+                  // width: "60%",
                 }}
               >
                 <Box sx={{ height: "8.5vh" }}>
@@ -244,26 +254,42 @@ const Access = () => {
                     }
                     select={true}
                     name="userClientId"
-                    style={{ width: "100%" }}
+                    style={{ width: "60%" }}
                   >
                     {clientListMap}
                   </CustomSelect>
                 </Box>
                 <Box sx={{ height: "8.5vh" }}>
-                  <CustomInput label="Email" name="email" type="text" />
+                  <CustomInput
+                    label="Email"
+                    name="email"
+                    type="text"
+                    style={{ width: "60%" }}
+                  />
                 </Box>
                 <Box sx={{ height: "8.5vh" }}>
                   <CustomInput
                     label="First Name"
                     name="firstName"
                     type="text"
+                    style={{ width: "60%" }}
                   />
                 </Box>
                 <Box sx={{ height: "8.5vh" }}>
-                  <CustomInput label="Last Name" name="lastName" type="text" />
+                  <CustomInput
+                    label="Last Name"
+                    name="lastName"
+                    type="text"
+                    style={{ width: "60%" }}
+                  />
                 </Box>
                 <Box sx={{ height: "8.5vh" }}>
-                  <CustomInput label="Password" name="password" type="text" />
+                  <CustomInput
+                    label="Password"
+                    name="password"
+                    type="text"
+                    style={{ width: "60%" }}
+                  />
                 </Box>
                 <Button
                   variant="contained"
