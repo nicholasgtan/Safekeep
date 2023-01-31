@@ -153,32 +153,108 @@ const Clients = () => {
     <Box
       sx={{
         display: "flex",
-        height: "67vh",
-        gap: "2rem",
+        height: "65vh",
+        // gap: "1rem",
         flexDirection: "column",
+        // border: "solid 1px #121212",
       }}
     >
-      {loading ? (
-        <Box>
-          <Typography variant="h3">Retrieving...</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {loading ? (
+          <Box>
+            <Typography variant="h3">Retrieving...</Typography>
+          </Box>
+        ) : (
+          <Box>
+            <Typography variant="h3">{client.name}</Typography>
+          </Box>
+        )}
+        <Box
+          sx={{
+            width: "40%",
+            // border: "solid 1px #121212",
+            // display: "flex",
+          }}
+        >
+          <Box
+            sx={{
+              my: 1,
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {loadClientList ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignSelf: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Formik
+                  initialValues={{ id: client.id }}
+                  onSubmit={handleSelect}
+                >
+                  {({ isSubmitting }) => (
+                    <Form
+                      autoComplete="off"
+                      style={{
+                        display: "flex",
+                        // flexDirection: "column",
+                        width: "100%",
+                        justifyContent: "space-between",
+                        gap: 2,
+                      }}
+                    >
+                      <CustomSelect
+                        label="Client List"
+                        select={true}
+                        name="id"
+                        style={{ width: "70%" }}
+                      >
+                        {clientListMap}
+                      </CustomSelect>
+
+                      <Button
+                        variant="contained"
+                        disabled={isSubmitting}
+                        type="submit"
+                        sx={{ height: "36px", width: "110px" }}
+                      >
+                        Retrieve
+                      </Button>
+                    </Form>
+                  )}
+                </Formik>
+              )}
+            </Box>
+          </Box>
         </Box>
-      ) : (
-        <Box>
-          <Typography variant="h3">{client.name}</Typography>
-        </Box>
-      )}
+      </Box>
       <Box
         sx={{
           display: "flex",
-          height: "50vh",
-          gap: "2rem",
+          height: "65vh",
+          gap: "1rem",
+          // border: "solid 1px #121212",
+          // width: "30%",
         }}
       >
         <Box
           sx={{
-            width: "70%",
+            width: "25%",
             display: "flex",
-            justifyContent: "center",
+            // justifyContent: "space-between",
           }}
         >
           <Box
@@ -204,22 +280,27 @@ const Clients = () => {
                 sx={{
                   display: "flex",
                   width: "100%",
-
                   flexDirection: "column",
                 }}
               >
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    // justifyContent: "space-between",
                     width: "100%",
                   }}
                 >
                   <Typography variant="h5">Account Summary</Typography>
                 </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-around" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                  }}
+                >
                   <Box
-                    sx={{ position: "relative", width: "10vw", height: "20vh" }}
+                    sx={{ position: "relative", width: "20vw", height: "30vh" }}
                   >
                     <PieChart
                       cashBalance={cashBalance}
@@ -229,10 +310,11 @@ const Clients = () => {
                   </Box>
                   <Box
                     sx={{
-                      width: "35%",
+                      // width: "35%",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "center",
+                      my: 1,
                     }}
                   >
                     <Box
@@ -241,9 +323,9 @@ const Clients = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="h6">Cash Balance:</Typography>
+                      <Typography variant="body2">Cash:</Typography>
                       <br />
-                      <Typography variant="h6">
+                      <Typography variant="body2">
                         ${formatCurrency(cashBalance)}
                       </Typography>
                     </Box>
@@ -253,8 +335,8 @@ const Clients = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="h6">Equity Balance:</Typography>
-                      <Typography variant="h6">
+                      <Typography variant="body2">Equity:</Typography>
+                      <Typography variant="body2">
                         ${formatCurrency(equityBalance)}
                       </Typography>
                     </Box>
@@ -264,10 +346,8 @@ const Clients = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="h6">
-                        Fixed Income Balance:
-                      </Typography>
-                      <Typography variant="h6">
+                      <Typography variant="body2">Fixed Income:</Typography>
+                      <Typography variant="body2">
                         ${formatCurrency(fixedIncomeBal)}
                       </Typography>
                     </Box>
@@ -277,8 +357,8 @@ const Clients = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="h6">Total NAV:</Typography>
-                      <Typography variant="h6">
+                      <Typography variant="body2">Total NAV:</Typography>
+                      <Typography variant="body2">
                         ${formatCurrency(totalNav)}
                       </Typography>
                     </Box>
@@ -288,87 +368,27 @@ const Clients = () => {
             )}
           </Box>
         </Box>
-        <Box
-          sx={{
-            width: "30%",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <Box sx={{ width: "85%" }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h5">Client List</Typography>
-              </Box>
-              <br />
-              {loadClientList ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignSelf: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <Formik
-                  initialValues={{ id: client.id }}
-                  onSubmit={handleSelect}
-                >
-                  {({ isSubmitting }) => (
-                    <Form
-                      autoComplete="off"
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "60%",
-                      }}
-                    >
-                      <CustomSelect label="Select" select={true} name="id">
-                        {clientListMap}
-                      </CustomSelect>
-                      <br />
-                      <Button
-                        variant="contained"
-                        disabled={isSubmitting}
-                        type="submit"
-                        sx={{ height: "36px", width: "110px" }}
-                      >
-                        Retrieve
-                      </Button>
-                    </Form>
-                  )}
-                </Formik>
-              )}
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+        {/* </Box>
       <Box
         sx={{
           display: "flex",
           height: "50vh",
         }}
-      >
-        <Box sx={{ display: "flex", width: "70%" }}>
+      > */}
+        <Box sx={{ display: "flex", width: "50%" }}>
           {loading ? (
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                width: "68.5%",
+                // width: "68.5%",
               }}
             >
               <CircularProgress />
             </Box>
           ) : (
-            <Box sx={{ height: "30vh", width: "100%" }}>
+            <Box sx={{ height: "50vh", width: "100%" }}>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h5">Trades Summary</Typography>
               </Box>
@@ -378,43 +398,47 @@ const Clients = () => {
         </Box>
         <Box
           sx={{
-            width: "30%",
+            width: "25%",
+            display: "flex",
+            // border: "solid 1px #121212",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              // justifyContent: "center",
+              flexDirection: "column",
+              width: "100%",
             }}
           >
-            <Box sx={{ width: "80%" }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h5">User List</Typography>
+            {/* <Box sx={{ width: "100%" }}> */}
+            {loading ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
+                <CircularProgress />
               </Box>
-              <br />
-              {loading ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignSelf: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                  }}
-                >
-                  <CircularProgress />
+            ) : (
+              <Box sx={{ height: "50vh" }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Typography variant="h5">User List</Typography>
                 </Box>
-              ) : (
-                <Box sx={{ height: "30vh", width: "100%" }}>
-                  <DataGrid
-                    rows={rowsUser()}
-                    columns={columnsUser}
-                    disableSelectionOnClick
-                    experimentalFeatures={{ newEditingApi: true }}
-                    autoPageSize={true}
-                  />
-                </Box>
-              )}
-            </Box>
+                <DataGrid
+                  rows={rowsUser()}
+                  columns={columnsUser}
+                  disableSelectionOnClick
+                  experimentalFeatures={{ newEditingApi: true }}
+                  autoPageSize={true}
+                />
+              </Box>
+            )}
+            {/* </Box> */}
           </Box>
         </Box>
       </Box>

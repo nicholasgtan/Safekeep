@@ -176,7 +176,7 @@ const DashboardSummary = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="body1">Cash Balance:</Typography>
+                      <Typography variant="body1">Cash:</Typography>
                       <br />
                       <Typography variant="body1">
                         ${formatCurrency(cashBalance)}
@@ -188,7 +188,7 @@ const DashboardSummary = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="body1">Equity Balance:</Typography>
+                      <Typography variant="body1">Equity:</Typography>
                       <Typography variant="body1">
                         ${formatCurrency(equityBalance)}
                       </Typography>
@@ -199,9 +199,7 @@ const DashboardSummary = () => {
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography variant="body1">
-                        Fixed Income Balance:
-                      </Typography>
+                      <Typography variant="body1">Fixed Income:</Typography>
                       <Typography variant="body1">
                         ${formatCurrency(fixedIncomeBal)}
                       </Typography>

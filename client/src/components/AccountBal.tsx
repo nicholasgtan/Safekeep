@@ -239,7 +239,7 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="h6">Cash Balance:</Typography>
+                  <Typography variant="h6">Cash:</Typography>
                   <br />
                   <Typography variant="h6">
                     ${formatCurrency(cashBalance)}
@@ -251,7 +251,7 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="h6">Equity Balance:</Typography>
+                  <Typography variant="h6">Equity:</Typography>
                   <Typography variant="h6">
                     ${formatCurrency(equityBalance)}
                   </Typography>
@@ -262,7 +262,7 @@ const AccountBal = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography variant="h6">Fixed Income Balance:</Typography>
+                  <Typography variant="h6">Fixed Income:</Typography>
                   <Typography variant="h6">
                     ${formatCurrency(fixedIncomeBal)}
                   </Typography>
