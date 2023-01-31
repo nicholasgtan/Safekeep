@@ -159,13 +159,14 @@ const Access = () => {
     <Box
       sx={{
         display: "flex",
-        height: "67vh",
-        gap: "2rem",
+        height: "65vh",
+        gap: "1rem",
         flexDirection: "column",
+        // border: "solid 1px #121212",
       }}
     >
       <Typography variant="h3">Access</Typography>
-      <Box sx={{ display: "flex", height: "60vh", width: "80hw" }}>
+      <Box sx={{ display: "flex" }}>
         <Box sx={{ width: "30%" }}>
           <Typography variant="h5">Create New Client</Typography>
           <br />
@@ -187,15 +188,18 @@ const Access = () => {
                   width: "60%",
                 }}
               >
-                <CustomInput label="Client Name" name="name" type="text" />
-                <br />
-                <CustomInput label="Client Type" name="type" type="text" />
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput label="Client Name" name="name" type="text" />
+                </Box>
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput label="Client Type" name="type" type="text" />
+                </Box>
                 <input
                   name="accountRepId"
                   type="hidden"
                   defaultValue={session.currentUserId}
                 />
-                <br />
+
                 <Button
                   variant="contained"
                   disabled={isSubmitting}
@@ -233,24 +237,34 @@ const Access = () => {
                   width: "60%",
                 }}
               >
-                <CustomSelect
-                  label={
-                    loadClientList ? "Retrieving your clients..." : "Client"
-                  }
-                  select={true}
-                  name="userClientId"
-                >
-                  {clientListMap}
-                </CustomSelect>
-                <br />
-                <CustomInput label="Email" name="email" type="text" />
-                <br />
-                <CustomInput label="First Name" name="firstName" type="text" />
-                <br />
-                <CustomInput label="Last Name" name="lastName" type="text" />
-                <br />
-                <CustomInput label="Password" name="password" type="text" />
-                <br />
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomSelect
+                    label={
+                      loadClientList ? "Retrieving your clients..." : "Client"
+                    }
+                    select={true}
+                    name="userClientId"
+                    style={{ width: "100%" }}
+                  >
+                    {clientListMap}
+                  </CustomSelect>
+                </Box>
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput label="Email" name="email" type="text" />
+                </Box>
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput
+                    label="First Name"
+                    name="firstName"
+                    type="text"
+                  />
+                </Box>
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput label="Last Name" name="lastName" type="text" />
+                </Box>
+                <Box sx={{ height: "8.5vh" }}>
+                  <CustomInput label="Password" name="password" type="text" />
+                </Box>
                 <Button
                   variant="contained"
                   disabled={isSubmitting}
