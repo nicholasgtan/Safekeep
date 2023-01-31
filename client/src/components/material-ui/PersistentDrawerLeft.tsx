@@ -127,12 +127,12 @@ export default function PersistentDrawerLeft() {
   ];
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", height: "75vh" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
         open={open}
-        sx={{ backgroundColor: "#222222", top: "104px" }}
+        sx={{ backgroundColor: "#222222", top: "103px" }}
       >
         <Toolbar>
           <IconButton
@@ -158,13 +158,13 @@ export default function PersistentDrawerLeft() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          top: "104px",
-          height: "80vh",
+          top: "103px",
+          height: "75.5vh",
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
-            top: "104px",
-            height: "80vh",
+            top: "103px",
+            height: "75.5vh",
           },
         }}
         variant="persistent"
