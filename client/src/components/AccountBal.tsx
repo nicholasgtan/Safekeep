@@ -219,7 +219,7 @@ const AccountBal = () => {
             </Typography>
             <br />
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box sx={{ position: "relative", width: "30vw", height: "60vh" }}>
+              <Box sx={{ position: "relative", width: "30vw", height: "50vh" }}>
                 <PieChart
                   cashBalance={cashBalance}
                   equityBalance={equityBalance}
@@ -231,7 +231,6 @@ const AccountBal = () => {
                   width: "35%",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "center",
                 }}
               >
                 <Box
