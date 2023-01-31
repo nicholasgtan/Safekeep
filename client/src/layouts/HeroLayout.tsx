@@ -11,8 +11,9 @@ const ProductHeroLayoutRoot = styled("section")(({ theme }) => ({
   color: theme.palette.common.white,
   position: "relative",
   display: "flex",
+  // justifyContent: "flex-end",
   alignItems: "center",
-  height: "75vh",
+  height: "77vh",
   [theme.breakpoints.up("sm")]: {
     minHeight: 500,
     maxHeight: 1300,

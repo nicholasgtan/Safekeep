@@ -58,9 +58,20 @@ const NavBar = () => {
     <AppBar
       color="secondary"
       position="sticky"
-      sx={{ display: "flex", flexDirection: "column" }}
+      sx={{
+        // display: "flex",
+        // flexDirection: "column",
+        height: "13vh",
+      }}
     >
-      <Paper>
+      <Paper
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+        }}
+      >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <div
             style={{

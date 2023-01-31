@@ -25,7 +25,7 @@ export default function AppFooter() {
         bgcolor: "secondary.main",
         display: "flex",
         justifyContent: "space-between",
-        height: "11vh",
+        height: "10vh",
       }}
     >
       <Box

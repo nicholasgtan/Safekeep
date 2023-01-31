@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     <div>
       <NavBar />
-      <main style={{ top: "104" }}>
+      <main>
         <Outlet />
       </main>
       <Footer />

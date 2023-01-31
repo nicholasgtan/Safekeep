@@ -391,12 +391,14 @@ const Trades = () => {
                     height: "10vh",
                   }}
                 >
-                  <Typography variant="body2">Trade Date:</Typography>
+                  <Typography variant="body2" sx={{ maxWidth: "40%" }}>
+                    Trade Date:
+                  </Typography>
                   <CustomInput
                     name="tradeDate"
                     type="date"
                     placeholder="Trade date"
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                   />
                 </Box>
                 <Box
@@ -408,12 +410,14 @@ const Trades = () => {
                     height: "10vh",
                   }}
                 >
-                  <Typography variant="body2">Settlement Date:</Typography>
+                  <Typography variant="body2" sx={{ maxWidth: "40%" }}>
+                    Settlement Date:
+                  </Typography>
                   <CustomInput
                     name="settlementDate"
                     type="date"
                     placeholder="Settlement date"
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                   />
                 </Box>
                 <Box
@@ -425,12 +429,14 @@ const Trades = () => {
                     height: "11vh",
                   }}
                 >
-                  <Typography variant="body2">Equity/Fixed Income:</Typography>
+                  <Typography variant="body2" sx={{ maxWidth: "40%" }}>
+                    Equity/Fixed Income:
+                  </Typography>
                   <CustomSelect
                     label="Select"
                     select={true}
                     name="stockType"
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                   >
                     <MenuItem value="equity">Equity</MenuItem>
                     <MenuItem value="fixedIncome">Fixed Income</MenuItem>
@@ -445,12 +451,14 @@ const Trades = () => {
                     height: "11vh",
                   }}
                 >
-                  <Typography variant="body2">Buy/Sell:</Typography>
+                  <Typography variant="body2" sx={{ maxWidth: "40%" }}>
+                    Buy/Sell:
+                  </Typography>
                   <CustomSelect
                     label="Select"
                     select={true}
                     name="position"
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                   >
                     <MenuItem value="buy">Buy</MenuItem>
                     <MenuItem value="sell">Sell</MenuItem>
@@ -465,13 +473,15 @@ const Trades = () => {
                     height: "10vh",
                   }}
                 >
-                  <Typography variant="body2">Settlement Amount:</Typography>
+                  <Typography variant="body2" sx={{ maxWidth: "40%" }}>
+                    Settlement Amount:
+                  </Typography>
                   <CustomInput
                     label="Nominal"
                     name="settlementAmt"
                     type="number"
                     InputProps={{ inputProps: { min: 1 } }}
-                    style={{ width: "60%" }}
+                    style={{ width: "55%" }}
                   />
                 </Box>
                 <Button
