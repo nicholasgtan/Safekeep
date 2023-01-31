@@ -41,7 +41,7 @@ export default function AppFooter() {
           <Link
             variant="body2"
             color="primary.main"
-            href=""
+            href="https://github.com/nicholasgtan/Safekeep"
             style={{ textDecoration: "none", color: "inherit" }}
           >
             About Safekeep
@@ -51,7 +51,7 @@ export default function AppFooter() {
           <Link
             variant="body2"
             color="primary.main"
-            href=""
+            href="https://github.com/nicholasgtan/Safekeep"
             style={{ textDecoration: "none", color: "inherit" }}
           >
             Contact
@@ -61,7 +61,7 @@ export default function AppFooter() {
           <Link
             variant="body2"
             color="primary.main"
-            href=""
+            href="https://github.com/nicholasgtan/Safekeep"
             style={{ textDecoration: "none", color: "inherit" }}
           >
             Help Centre
