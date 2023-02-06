@@ -8,7 +8,6 @@ import { CircularProgress } from "@mui/material";
 import formatCurrency from "../utils/formatCurrency";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Form, Formik, FormikHelpers, FormikValues } from "formik";
-import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
 import { cashBalSchema } from "./Formik/yup.schema";
 import PieChart from "./PieChart";
@@ -332,6 +331,7 @@ const AccountBal = () => {
           <Typography variant="h5">Withdraw Cash</Typography>
           <br />
           <Formik
+            enableReinitialize={true}
             initialValues={{ cashBalance: 0 }}
             validationSchema={cashBalSchema}
             onSubmit={handleWithdraw}
@@ -341,10 +341,9 @@ const AccountBal = () => {
                 autoComplete="off"
                 style={{ display: "flex", gap: "0.2rem" }}
               >
-                <CustomInput
+                <CustomNumInput
                   label="Cash"
                   name="cashBalance"
-                  type="number"
                   InputProps={{ inputProps: { min: 1 } }}
                 />
                 <br />
