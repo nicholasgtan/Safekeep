@@ -12,6 +12,7 @@ import CustomInput from "./Formik/CustomInput";
 import Button from "@mui/material/Button";
 import { cashBalSchema } from "./Formik/yup.schema";
 import PieChart from "./PieChart";
+import CustomNumInput from "./Formik/CustomNumInput";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -296,6 +297,7 @@ const AccountBal = () => {
           <Typography variant="h5">Deposit Cash</Typography>
           <br />
           <Formik
+            enableReinitialize={true}
             initialValues={{ cashBalance: 0 }}
             validationSchema={cashBalSchema}
             onSubmit={handleDeposit}
@@ -305,10 +307,9 @@ const AccountBal = () => {
                 autoComplete="off"
                 style={{ display: "flex", gap: "0.2rem" }}
               >
-                <CustomInput
+                <CustomNumInput
                   label="Cash"
                   name="cashBalance"
-                  type="number"
                   InputProps={{ inputProps: { min: 1 } }}
                 />
                 <br />
