@@ -12,6 +12,7 @@ import CustomSelect from "./Formik/CustomSelect";
 import MenuItem from "@mui/material/MenuItem";
 import AuthAPI from "../utils/AuthAPI";
 import LoadingAPI from "../utils/LoadingAPI";
+import CustomNumInput from "./Formik/CustomNumInput";
 
 export interface TradeProps {
   tradeDate: string;
@@ -361,6 +362,7 @@ const Trades = () => {
         <Box>
           <Typography variant="h6">Trade Input</Typography>
           <Formik
+            enableReinitialize={true}
             initialValues={{
               tradeDate: "",
               settlementDate: "",
@@ -476,10 +478,9 @@ const Trades = () => {
                   <Typography variant="body2" sx={{ maxWidth: "40%" }}>
                     Settlement Amount:
                   </Typography>
-                  <CustomInput
+                  <CustomNumInput
                     label="Nominal"
                     name="settlementAmt"
-                    type="number"
                     InputProps={{ inputProps: { min: 1 } }}
                     style={{ width: "55%" }}
                   />
